@@ -25,7 +25,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <UApp>
+  <UApp >
     <NuxtLayout>
         <NuxtPage/>
     </NuxtLayout>
