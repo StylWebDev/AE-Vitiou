@@ -1,90 +1,103 @@
 <template>
-  <UDashboardNavbar title="Inbox" :toggle="{ color: 'primary', variant: 'subtle',  class: 'rounded-full' }">
-    <template #leading>
-      <UDashboardSidebarCollapse />
-    </template>
+  <div>
+    <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }">
+      <template #leading>
+        <UAvatar src="/logo.webp" size="3xl" />
+      </template>
 
-    <template #trailing>
-      <UBadge label="4" variant="subtle" />
-    </template>
+      <UNavigationMenu :items="routes" variant="pill" color="primary" />
 
-    <template #right>
-      <UTabs :items="items" default-value="all" size="sm" class="w-40" :content="false" />
-      <UColorModeButton />
-    </template>
-  </UDashboardNavbar>
 
-  <UMain>
-    <slot/>
-  </UMain>
+      <template #right>
+        <UButton to="/sudo" variant="ghost" icon="material-symbols:person-shield-rounded"/>
+        <UColorModeButton />
+      </template>
 
-  <USeparator icon="i-simple-icons-nuxtdotjs" />
+      <UDrawer v-model:open="open" direction="right" />
+    </UDashboardNavbar>
 
-  <UFooter>
-    <template #left>
-      <p class="text-muted text-sm">
-        Copyright © {{ new Date().getFullYear() }}
-      </p>
-    </template>
+    <UMain>
+      <slot/>
+    </UMain>
 
-    <UNavigationMenu :items="footerItems" variant="link" />
+    <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" />
 
-    <template #right>
-      <UButton
-        icon="i-simple-icons-discord"
-        color="neutral"
-        variant="ghost"
-        to="https://go.nuxt.com/discord"
-        target="_blank"
-        aria-label="Discord"
-      />
-      <UButton
-        icon="i-simple-icons-x"
-        color="neutral"
-        variant="ghost"
-        to="https://go.nuxt.com/x"
-        target="_blank"
-        aria-label="X"
-      />
-      <UButton
-        icon="i-simple-icons-github"
-        color="neutral"
-        variant="ghost"
-        to="https://github.com/nuxt/nuxt"
-        target="_blank"
-        aria-label="GitHub"
-      />
-    </template>
-  </UFooter>
+    <UFooter>
+      <template #left>
+        <UButton variant="link" color="neutral" to="styls.pages.dev" class="text-muted text-sm">
+          StylWebDev © {{ new Date().getFullYear() }}
+        </UButton>
+      </template>
+
+      <UNavigationMenu :items="footerItems" variant="link" />
+
+      <template #right>
+        <UButton
+          icon="ci:facebook"
+          color="neutral"
+          variant="ghost"
+          to="https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791"
+          aria-label="Facebook"
+        />
+        <UButton
+          icon="ci:instagram"
+          color="neutral"
+          variant="ghost"
+          to="https://www.instagram.com/ae_bitsiou/"
+          target="_blank"
+          aria-label="Instagram"
+        />
+        <UButton
+          icon="ci:mail"
+          color="neutral"
+          variant="ghost"
+          to="mailto:abvitsiou@gmail.gr"
+          target="_blank"
+          aria-label="Mail"
+        />
+      </template>
+    </UFooter>
+  </div>
 </template>
 
 <script lang="ts">
-import type { NavigationMenuItem, TabsItem } from '@nuxt/ui'
+import type { NavigationMenuItem } from '@nuxt/ui'
 </script>
 
 <script setup lang="ts">
-const items: TabsItem[] = [
+const open = ref(false)
+
+const routes: NavigationMenuItem = [
   {
-    label: 'All',
-    value: 'all'
+    label: 'Αρχική',
+    icon: 'solar:home-2-bold',
+    to: '/'
   },
   {
-    label: 'Unread',
-    value: 'unread'
-  }
+    label: 'Αγώνες',
+    icon: 'streamline-ultimate:soccer-field-bold',
+    to: '/matches'
+  },
+  {
+    label: 'Η Ομάδα',
+    icon: 'fluent:people-team-28-filled',
+    to: '/team'
+  },
+  {
+    label: 'Σκόρερ',
+    icon: 'maki:soccer-11',
+    to: '/scorers'
+  },
+  {
+    label: 'Blog',
+    icon: 'gravity-ui:square-article',
+    to: '/blog'
+  },
 ]
 
 const footerItems: NavigationMenuItem[] = [{
-  label: 'Figma Kit',
-  to: 'https://go.nuxt.com/figma-ui',
-  target: '_blank'
-}, {
-  label: 'Playground',
-  to: 'https://stackblitz.com/edit/nuxt-ui',
-  target: '_blank'
-}, {
-  label: 'Releases',
-  to: 'https://github.com/nuxt/ui/releases',
+  label: 'ΕΠΣ Καστοριάς',
+  to: 'https://epskastorias.gr/',
   target: '_blank'
 }]
 </script>

@@ -19,6 +19,10 @@ export default defineNuxtConfig({
     ]
   },
 
+  devServer: {
+    port: 8080,
+  },
+
   css: ['~/assets/css/main.css'],
 
   routeRules: {
