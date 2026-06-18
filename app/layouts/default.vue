@@ -1,13 +1,12 @@
 <template>
   <div class="dark:bg-primary-950 light:bg-primary-200">
-    <UContainer :ui="{base: 'px-0!'}">
+    <UContainer :ui="{base: 'px-0! space-y-10'}">
       <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }" class="sticky top-0 dark:bg-primary-800/30 light:bg-primary-50/30 backdrop-blur-2xl" :ui="{root: 'border-primary'}">
         <template #leading>
           <UAvatar src="/logo.webp" size="3xl" />
         </template>
 
-        <UButton v-for="route in routes" :key="route.label" v-bind="route" variant="link" active-color="primary" active-variant="subtle" :ui="{linkLabel: 'bg-opacity-30'}" />
-
+        <UButton v-for="route in routes" :key="route.label" v-bind="route" variant="link" active-color="primary" active-variant="subtle" />
 
         <template #right>
           <UButton to="/sudo" variant="ghost" color="secondary" icon="material-symbols:person-shield-rounded"/>
@@ -17,7 +16,7 @@
         <LayoutsDrawer v-model="open" :routes/>
       </UDashboardNavbar>
 
-      <UMain>
+      <UMain >
         <slot/>
       </UMain>
 
@@ -33,26 +32,7 @@
         <UNavigationMenu :items="footerItems" color="primary" variant="link" :ui="{linkLabel: 'text-primary', linkLabelExternalIcon: 'text-primary'}" />
 
         <template #right>
-          <UButton
-            icon="ci:facebook"
-            variant="ghost"
-            to="https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791"
-            aria-label="Facebook"
-          />
-          <UButton
-            icon="ci:instagram"
-            variant="ghost"
-            to="https://www.instagram.com/ae_bitsiou/"
-            target="_blank"
-            aria-label="Instagram"
-          />
-          <UButton
-            icon="ci:mail"
-            variant="ghost"
-            to="mailto:abvitsiou@gmail.gr"
-            target="_blank"
-            aria-label="Mail"
-          />
+          <UButton v-for="(item,index) in social" :key="`social-${item['aria-label']}-${index}`" v-bind="social" />
         </template>
       </UFooter>
     </UContainer>
@@ -66,7 +46,7 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 <script setup lang="ts">
 const open = ref(false)
 
-const routes: NavigationMenuItem = [
+const routes = [
   {
     label: 'Αρχική',
     icon: 'solar:home-2-bold',
@@ -99,4 +79,28 @@ const footerItems: NavigationMenuItem[] = [{
   to: 'https://epskastorias.gr/',
   target: '_blank'
 }]
+
+const social = [
+  {
+    icon: "ci:facebook",
+    variant: "ghost",
+    to: "https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791",
+    target: "_blank",
+    'aria-label': "Facebook"
+  },
+  {
+    icon: "ci:instagram",
+    variant: "ghost",
+    to: "https://www.instagram.com/ae_bitsiou/",
+    target: "_blank",
+    'aria-label': "Instagram"
+  },
+  {
+    icon: "ci:mail",
+    variant: "ghost",
+    to: "mailto:abvitsiou@gmail.gr",
+    target: "_blank",
+    'aria-label': "Mail"
+  },
+]
 </script>
