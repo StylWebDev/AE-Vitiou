@@ -1,6 +1,6 @@
 <template>
   <div class="dark:bg-primary-950 light:bg-primary-200">
-    <UContainer :ui="{base: 'px-0! space-y-10'}">
+    <UContainer :ui="{base: 'px-0! space-y-6'}">
       <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }" class="sticky top-0 dark:bg-primary-800/30 light:bg-primary-50/30 backdrop-blur-2xl" :ui="{root: 'border-primary'}">
         <template #leading>
           <UAvatar src="/logo.webp" size="3xl" />
@@ -20,21 +20,23 @@
         <slot/>
       </UMain>
 
-      <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" />
+      <div>
+        <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" class="translate-y-2" :ui="{root: 'relative z-50'}" />
 
-      <UFooter class=" dark:bg-primary-800/30 light:bg-primary-50/30 backdrop-blur-2xl">
-        <template #left>
-          <UButton variant="link" to="https://styls.pages.dev" target="_blank" class="text-sm">
-            StylWebDev © {{ new Date().getFullYear() }}
-          </UButton>
-        </template>
+        <UFooter class=" dark:bg-primary-800/30 light:bg-primary-50/30 backdrop-blur-2xl" :ui="{root: 'relative z-40'}">
+          <template #left>
+            <UButton variant="link" to="https://styls.pages.dev" target="_blank" class="text-sm">
+              StylWebDev © {{ new Date().getFullYear() }}
+            </UButton>
+          </template>
 
-        <UNavigationMenu :items="footerItems" color="primary" variant="link" :ui="{linkLabel: 'text-primary', linkLabelExternalIcon: 'text-primary'}" />
+          <UNavigationMenu :items="footerItems" color="primary" variant="link" :ui="{linkLabel: 'text-primary', linkLabelExternalIcon: 'text-primary'}" />
 
-        <template #right>
-          <UButton v-for="(item,index) in social" :key="`social-${item['aria-label']}-${index}`" v-bind="social" />
-        </template>
-      </UFooter>
+          <template #right>
+            <UButton v-for="(item,index) in social" :key="`social-${item['aria-label']}-${index}`" v-bind="item" />
+          </template>
+        </UFooter>
+      </div>
     </UContainer>
   </div>
 </template>
