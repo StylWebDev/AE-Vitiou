@@ -19,6 +19,11 @@ export default defineNuxtConfig({
     ]
   },
 
+  colorMode: {
+    preference: 'dark',
+    fallback: 'dark'
+  },
+
   devServer: {
     port: 8080,
   },

@@ -17,7 +17,7 @@
   --color-primary-900: #300b11;
   --color-primary-950: #1b0609;
 
-  --color-secondary-50:  #faf5fa;
+  --color-secondary-50: #faf5fa;
   --color-secondary-100: #f3e8f4;
   --color-secondary-200: #e5d1e7;
   --color-secondary-300: #d0add4;
@@ -28,4 +28,22 @@
   --color-secondary-800: #512e53; /* base */
   --color-secondary-900: #432747;
   --color-secondary-950: #271429;
+}
+
+body  {
+  background-color: #1b0609 !important;
+}
+
+/* Page transition (fade+lift) that pairs with the rolling-ball overlay */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
 }
