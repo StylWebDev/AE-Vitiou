@@ -1,49 +1,3 @@
-<script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
-
-const pages = [
-  { label: 'Αρχική', icon: 'solar:home-2-bold', to: '/' },
-  { label: 'Αγώνες', icon: 'streamline-ultimate:soccer-field-bold', to: '/matches' },
-  { label: 'Η Ομάδα', icon: 'fluent:people-team-28-filled', to: '/team' },
-  { label: 'Σκόρερ', icon: 'maki:soccer-11', to: '/scorers' },
-  { label: 'Blog', icon: 'gravity-ui:square-article', to: '/blog' }
-]
-
-const externalLinks: NavigationMenuItem[] = [
-  { label: 'ΕΠΣ Καστοριάς', to: 'https://epskastorias.gr/', target: '_blank' }
-]
-
-const socialLinks = [
-  {
-    icon: 'ci:facebook',
-    variant: 'ghost',
-    color: 'neutral',
-    to: 'https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791',
-    target: '_blank',
-    'aria-label': 'Facebook'
-  },
-  {
-    icon: 'ci:instagram',
-    variant: 'ghost',
-    color: 'neutral',
-    to: 'https://www.instagram.com/ae_bitsiou/',
-    target: '_blank',
-    'aria-label': 'Instagram'
-  },
-  {
-    icon: 'ci:mail',
-    variant: 'ghost',
-    color: 'neutral',
-    to: 'mailto:abvitsiou@gmail.gr',
-    target: '_blank',
-    'aria-label': 'Mail'
-  }
-]
-
-const open = ref(false)
-const year = new Date().getFullYear()
-</script>
-
 <template>
   <UContainer class="min-h-screen flex flex-col ">
     <!-- Header -->
@@ -68,7 +22,7 @@ const year = new Date().getFullYear()
 
 
     <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" class="translate-y-2" :ui="{root: 'relative z-50'}" />
-    <UFooter class=" dark:bg-primary-800/30 light:bg-primary-50/30 backdrop-blur-2xl" :ui="{root: 'relative z-40'}">
+    <UFooter class=" bg-primary-800/30 backdrop-blur-2xl" :ui="{root: 'relative z-40'}">
       <template #left>
         <UButton variant="link" to="https://styls.pages.dev" target="_blank" class="text-sm">
           StylWebDev © {{ new Date().getFullYear() }}
@@ -83,3 +37,45 @@ const year = new Date().getFullYear()
     </UFooter>
   </UContainer>
 </template>
+
+<script setup lang="ts">
+import type { NavigationMenuItem, ButtonProps } from '@nuxt/ui'
+
+const pages = [
+  { label: 'Αρχική', icon: 'solar:home-2-bold', to: '/' },
+  { label: 'Αγώνες', icon: 'streamline-ultimate:soccer-field-bold', to: '/matches' },
+  { label: 'Η Ομάδα', icon: 'fluent:people-team-28-filled', to: '/team' },
+  { label: 'Σκόρερ', icon: 'maki:soccer-11', to: '/scorers' },
+  { label: 'Blog', icon: 'gravity-ui:square-article', to: '/blog' }
+]
+
+const externalLinks: NavigationMenuItem[] = [
+  { label: 'ΕΠΣ Καστοριάς', to: 'https://epskastorias.gr/', target: '_blank' }
+]
+
+const socialLinks: ButtonProps[] = [
+  {
+    icon: 'ci:facebook',
+    variant: 'ghost',
+    color: 'neutral',
+    to: 'https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791',
+    target: '_blank',
+  },
+  {
+    icon: 'ci:instagram',
+    variant: 'ghost',
+    color: 'neutral',
+    to: 'https://www.instagram.com/ae_bitsiou/',
+    target: '_blank',
+  },
+  {
+    icon: 'ci:mail',
+    variant: 'ghost',
+    color: 'neutral',
+    to: 'mailto:abvitsiou@gmail.gr',
+    target: '_blank',
+  }
+]
+
+const open = ref(false)
+</script>

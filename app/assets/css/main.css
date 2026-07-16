@@ -1,10 +1,6 @@
-body  {
-  background-color: #1b0609 !important;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sometype+Mono:ital,wght@0,400..700;1,400..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @import "tailwindcss";
 @import "@nuxt/ui";
-@import url('https://fonts.googleapis.com/css2?family=GFS+Neohellenic:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Sometype+Mono:ital,wght@0,400..700;1,400..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 @theme static {
   --font-sans: 'GFS Neohellenic', sans-serif;
@@ -32,6 +28,10 @@ body  {
   --color-secondary-800: #512e53; /* base */
   --color-secondary-900: #432747;
   --color-secondary-950: #271429;
+}
+
+body  {
+  background-color: #1b0609 !important;
 }
 
 /* Page transition (fade+lift) that pairs with the rolling-ball overlay */

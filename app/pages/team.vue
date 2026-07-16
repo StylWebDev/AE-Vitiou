@@ -11,18 +11,24 @@ const players = Array.from({ length: 12 }).map((_, i) => ({
 <template>
   <div class="mx-auto max-w-6xl px-4 py-12">
     <h1 class="mb-8 text-3xl font-bold text-primary-500">Η Ομάδα</h1>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <UCard v-for="p in players" :key="p.number" class="transition hover:shadow-lg">
-        <div class="flex items-center gap-4">
-          <div class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-500 text-xl font-bold text-white">
-            {{ p.number }}
-          </div>
-          <div>
-            <p class="font-bold">{{ p.name }}</p>
-            <p class="text-sm text-muted">{{ p.position }}</p>
-          </div>
+    <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
+      <div
+        v-for="(s, i) in players"
+        :key="s.number"
+        class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
+        :class="i !== players.length - 1 ? 'border-b border-primary-800/40' : ''"
+      >
+        <div class="flex gap-4 max-md:justify-center max-lg:w-full">
+          <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
+          <UBadge size="lg" label="gk" class="rounded-full" />
+          <span class="truncate font-semibold uppercase tracking-wide text-white">{{ s.name }}</span>
         </div>
-      </UCard>
+
+        <div class="flex gap-4 max-lg:justify-between max-lg:w-9/10">
+          <span class="shrink-0 text-lg font-black text-secondary-300">{{ s.position }}</span>
+          <UBadge size="md" variant="subtle" color="success" label="GA: (15)" class="rounded-full" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
