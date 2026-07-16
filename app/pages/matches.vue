@@ -148,10 +148,10 @@ const days = computed(() => {
         :items="phases"
         size="lg"
         class="mb-4 w-full"
-        :ui="{ base: 'bg-primary-900/40 ring-primary-800/50 text-white' }"
+        :ui="{ base: 'bg-primary-900/40 ring-primary-800/50 text-white hover:bg-primary-700', content: 'bg-primary-800 ring-primary-500', item: 'text-primary-300', trailingIcon: 'text-primary-300' }"
       />
 
-      <div class="mb-6 grid grid-cols-4 overflow-hidden rounded-xl border border-primary-800/50 bg-primary-900/30">
+      <div class="mb-6 grid  md:grid-cols-4 overflow-hidden rounded-xl border border-primary-800/50 bg-primary-900/30">
         <button
           v-for="t in tabs"
           :key="t.key"

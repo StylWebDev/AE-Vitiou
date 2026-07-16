@@ -1,12 +1,12 @@
 <template>
   <UContainer class="min-h-screen flex flex-col ">
     <!-- Header -->
-    <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }" class="sticky top-0 z-50 bg-linear-to-tr  from-primary-600/90 to-primary-900/90 backdrop-blur" :ui="{root: 'border-primary/40'}">
+    <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }" class="sticky top-0 z-50 bg-linear-to-tr  from-primary-600/90 to-primary-900/90 backdrop-blur" :ui="{root: 'border-primary/40', title: 'text-primary-300'}">
       <template #leading>
         <UAvatar src="/logo.webp" size="3xl" />
       </template>
 
-      <UButton v-for="route in pages" :key="route.label" v-bind="route" variant="link" active-color="primary" active-variant="subtle" />
+      <UButton v-for="route in pages" :key="route.label" v-bind="route" variant="link" color="secondary" active-color="secondary" active-variant="subtle" />
 
       <template #right>
         <UButton to="/sudo" variant="ghost" color="secondary" icon="material-symbols:person-shield-rounded"/>
@@ -24,12 +24,12 @@
     <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" class="translate-y-2" :ui="{root: 'relative z-50'}" />
     <UFooter class=" bg-primary-800/30 backdrop-blur-2xl" :ui="{root: 'relative z-40'}">
       <template #left>
-        <UButton variant="link" to="https://styls.pages.dev" target="_blank" class="text-sm">
+        <UButton variant="link" color="secondary" to="https://styls.pages.dev" target="_blank" class="text-sm">
           StylWebDev © {{ new Date().getFullYear() }}
         </UButton>
       </template>
 
-      <UNavigationMenu :items="externalLinks" color="primary" variant="link" :ui="{linkLabel: 'text-primary', linkLabelExternalIcon: 'text-primary'}" />
+      <UNavigationMenu :items="externalLinks" color="info" variant="link" :ui="{linkLabel: 'text-info', linkLabelExternalIcon: 'text-info'}" />
 
       <template #right>
         <UButton v-for="(item,index) in socialLinks" :key="`social-${index}`" v-bind="item" />
@@ -42,7 +42,7 @@
 import type { NavigationMenuItem, ButtonProps } from '@nuxt/ui'
 
 const pages = [
-  { label: 'Αρχική', icon: 'solar:home-2-bold', to: '/' },
+  { label: 'Αρχική', icon: 'game-icons:soccer-ball', to: '/' },
   { label: 'Αγώνες', icon: 'streamline-ultimate:soccer-field-bold', to: '/matches' },
   { label: 'Η Ομάδα', icon: 'fluent:people-team-28-filled', to: '/team' },
   { label: 'Σκόρερ', icon: 'maki:soccer-11', to: '/scorers' },
@@ -57,21 +57,21 @@ const socialLinks: ButtonProps[] = [
   {
     icon: 'ci:facebook',
     variant: 'ghost',
-    color: 'neutral',
+    color: 'secondary',
     to: 'https://www.facebook.com/photo/?fbid=638189021642804&set=a.508029164658791',
     target: '_blank',
   },
   {
     icon: 'ci:instagram',
     variant: 'ghost',
-    color: 'neutral',
+    color: 'secondary',
     to: 'https://www.instagram.com/ae_bitsiou/',
     target: '_blank',
   },
   {
     icon: 'ci:mail',
     variant: 'ghost',
-    color: 'neutral',
+    color: 'secondary',
     to: 'mailto:abvitsiou@gmail.gr',
     target: '_blank',
   }

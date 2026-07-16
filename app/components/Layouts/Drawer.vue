@@ -1,12 +1,12 @@
 <template>
-  <UDrawer v-model:open="open" direction="left" :ui="{overlay: 'bg-primary-50/10', content: ' dark:bg-primary-950 light:bg-primary-100 ', body: 'mt-4', handle: 'bg-primary!'}">
+  <UDrawer v-model:open="open" direction="left" :ui="{overlay: 'bg-primary-50/10', content: 'bg-linear-to-t from-primary-700 to-primary-950 ', body: 'mt-4', handle: 'bg-primary-300!'}">
     <slot/>
     <template #header>
       <div class="flex items-center gap-x-5 pl-4">
         <UAvatar src="/logo.webp" size="3xl" class="scale-150" />
         <div>
-          <h1 class="font-bold text-xl">ΑΕ Βιτσίου</h1>
-          <p class="text-sm ">Κεντρικό Μενού</p>
+          <h1 class="font-bold text-xl text-primary-400">ΑΕ Βιτσίου</h1>
+          <p class="text-sm text-primary-300">Κεντρικό Μενού</p>
         </div>
       </div>
 

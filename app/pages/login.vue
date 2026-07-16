@@ -1,12 +1,12 @@
 <template>
   <div class="size-full flex justify-center items-center">
-    <UForm ref="form" :schema="schema" :state="state" class="p-4 ring ring-muted rounded-2xl space-y-4" @submit.prevent="login" >
-      <UEmpty icon="material-symbols:deployed-code-account" size="xl" variant="naked" title="Σύνδεση Χρήστη" description="Η σύνδεση είναι δυνατή μόνο για τους διαχειριστές της ΑΕ-Βιτσίου και του developer της σελίδας" />
-      <UFormField name="email" label="email" required >
-        <UInput v-model="state.email" class="w-full"/>
+    <UForm ref="form" :schema="schema" :state="state" class="p-4 ring ring-primary-700 bg-primary-900 rounded-2xl space-y-4" @submit.prevent="login" >
+      <UEmpty :avatar="{ icon: `material-symbols:deployed-code-account`, color: 'primary'}" size="xl" variant="naked" title="Σύνδεση Χρήστη" description="Η σύνδεση είναι δυνατή μόνο για τους διαχειριστές της ΑΕ-Βιτσίου και του developer της σελίδας" :ui="{title: 'text-primary', description: 'text-primary-300'}" />
+      <UFormField size="lg" name="email" label="Em@il" required :ui="{label: 'text-primary-100'}" >
+        <UInput v-model="state.email" class="w-full" :ui="{base: 'bg-primary-950'}"/>
       </UFormField>
-      <UFormField name="password" label="Κωδικός Πρόσβασης" required>
-        <UInput v-model="state.password" type="password" class="w-full"/>
+      <UFormField size="lg" name="password" label="Κωδικός Πρόσβασης" required :ui="{label: 'text-primary-100'}">
+        <UInput v-model="state.password" type="password" class="w-full" :ui="{base: 'bg-primary-950'}"/>
       </UFormField>
       <UButton label="Σύνδεση" class="w-full justify-center" @click="form?.submit()"  />
     </UForm>
