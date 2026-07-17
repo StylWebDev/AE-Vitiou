@@ -6,11 +6,27 @@ const players = Array.from({ length: 12 }).map((_, i) => ({
   name: `Παίκτης ${i + 1}`,
   position: ['Τερματοφύλακας', 'Αμυντικός', 'Μέσος', 'Επιθετικός'][i % 4]
 }))
+
+const receivers = [
+  {number: 1, name: 'Yashin'},
+  {number: 2, name: 'Maldini'},
+  {number: 3, name: 'Cafu'},
+  {number: 4, name: 'Beckenbauer'},
+  {number: 5, name: 'Xavi'},
+  {number: 6, name: 'Matthaus'},
+  {number: 7, name: 'Christiano'},
+  {number: 8, name: 'Pelé'},
+  {number: 9, name: 'Ronaldo'},
+  {number: 10, name: 'Maradona'},
+  {number: 11, name: 'Messi'},
+]
 </script>
 
 <template>
   <div class="mx-auto max-w-6xl px-4 py-12">
     <h1 class="mb-8 text-3xl font-bold text-primary-500">Η Ομάδα</h1>
+
+    <LayoutsSoccerField orientation="landscape"  :receivers="receivers"  style="width: 100%; height: 440px;" />
     <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
       <div
         v-for="(s, i) in players"

@@ -1,89 +1,161 @@
 <template>
-<div ref="ground" class="bg-size-[20%] bg-center bg-[image:var(--field-background)]" :style="{ '--field-background': `url('${backgroundUrl}')` }" >
-  <div class="zone" :style="zoneStyle('home')">
-    <div class="receiver-team">
-      <div v-for="(player, index) in receivers" :key="index" class="player" :style="playerClass(index, player, 'home', receiverSystem)">
-        <div class="player-number" :style="playerNumberStyle(index, player, 'home')">{{player.number}}</div>
-        <div class="player-name absolute top-1/2 z-10 font-normal text-end leading-[100%]" v-if="showName" :style="playerComputedName"><span>{{player.name}}</span>
+  <div
+    ref="ground"
+    class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg bg-center bg-[image:var(--field-background)]"
+    :style="{ '--field-background': `url('${background}')` }"
+  >
+    <div class="zone absolute" :style="[zoneFrameStyleValue('home'), computedBorderStyle]">
+      <div class="receiver-team">
+        <div
+          v-for="(player, index) in receivers"
+          :key="index"
+          class="player absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full
+               [animation-duration:5s] [animation-timing-function:linear] [animation-delay:2s]
+               [animation-iteration-count:infinite] [animation-direction:alternate] [animation-play-state:running]"
+          :class="index === 0 ? 'bg-gray-500' : ''"
+          :style="[playerClass(index, 'home', receiverSystem), index === 0 ? '' : `background:${receiverColor};`]"
+        >
+          <div
+            class="player-number absolute top-[85%] left-[85%] p-0 rounded-2xl table my-0 mx-auto text-center font-bold
+                 border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none"
+            :class="index === 0 ? 'text-red-600 bg-gray-500!' : 'text-black'"
+            :style="playerNumberStyle('home', index)"
+          >{{player.number}}</div>
+          <div
+            v-if="showName"
+            class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap"
+            :style="playerComputedName"
+          ><span>{{player.name}}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="penalty-area absolute border border-white
+           after:content-[''] after:absolute after:block after:bg-white after:w-0.5 after:h-0.5
+           after:top-17.5 after:right-3.75"
+      :style="[penaltyAreaStyleValue('home'), computedBorderStyle]"
+    >
+      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('home'), computedBorderStyle]" />
+    </div>
+
+    <div
+      class="center-area absolute rounded-full border border-white
+           after:content-[''] after:absolute after:block after:bg-white after:border after:border-white
+           after:top-1/2 after:left-1/2 after:w-px after:h-px"
+      :style="computedCircleStyle"
+    />
+
+    <div
+      class="penalty-area absolute border border-white
+           after:content-[''] after:absolute after:block after:bg-white after:w-0.5 after:h-0.5
+           after:top-17.5 after:left-3.75"
+      :style="[penaltyAreaStyleValue('visitor'), computedBorderStyle]"
+    >
+      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('visitor'), computedBorderStyle]" />
+    </div>
+
+    <div class="zone absolute" :style="[zoneFrameStyleValue('visitor'), computedBorderStyle]">
+      <div class="visitor-team">
+        <div
+          v-for="(player, index) in visitors"
+          :key="index"
+          class="player absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full
+               [animation-duration:5s] [animation-timing-function:linear] [animation-delay:2s]
+               [animation-iteration-count:infinite] [animation-direction:alternate] [animation-play-state:running]"
+          :class="index === 0 ? 'bg-cyan-400' : ''"
+          :style="[playerClass(index, 'visitor', visitorSystem), index === 0 ? '' : `background:${visitorColor};`]"
+        >
+          <div
+            class="player-number absolute top-1/2 left-1/2 p-0 table my-0 mx-auto text-center font-bold
+                 border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none"
+            :class="index === 0 ? 'text-red-600' : 'text-white'"
+            :style="playerNumberStyle('visitor', index)"
+          >{{player.number}}</div>
+          <div
+            v-if="showName"
+            class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap"
+            :style="playerComputedName"
+          >{{player.name}}</div>
         </div>
       </div>
     </div>
   </div>
-  <div class="penalty-area" :style="penaltyAreaStyle('home')">
-    <div class="goal-area " :style="goalAreaStyle('home')">
-    </div>
-  </div>
-  <div class="center-area" :style="circleStyle()"></div>
-  <div class="penalty-area" :style="penaltyAreaStyle('visitor')">
-    <div class="goal-area" :style="goalAreaStyle('visitor')">
-    </div>
-  </div>
-  <div class="zone" :style="zoneStyle('visitor')">
-    <div class="visitor-team">
-      <div v-for="(player, index) in visitors" :key="index" class="player" :class="playerClass(index, player, 'home', receiverSystem)">
-        <div class="player-number" :style="playerNumberStyle(index, player, 'visitor')">{{player.number}}</div>
-        <div class="player-name" v-if="showName" :style="playerComputedName">{{player.name}}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 </template>
 
 <script lang="ts">
-  import backgroundUrl from '~/assets/grass.png';
+import background from '~/assets/grass.png';
 
-  interface RatioConfig {
-    PENALTY: { LENGTH: number; WIDTH: number };
-    GOAL: { LENGTH: number; WIDTH: number };
-    CIRCLE: { WIDTH: number };
-    PLAYER: { SIZE: number };
-  }
+enum Formation {
+  S433 = 'S433',
+  S343 = 'S343',
+  S442 = 'S442',
+  S352 = 'S352',
+  S451 = 'S451',
+  S3421 = 'S3421',
+  S4231 = 'S4231',
+}
 
-  enum Formation {
-    S433 = 'S433',
-    S343 = 'S343',
-    S442 = 'S442',
-    S352 = 'S352',
-    S451 = 'S451',
-    S3421 = 'S3421',
-    S4231 = 'S4231',
-  }
+type OrientationValue = 'landscape' | 'portrait';
 
-  interface Player {
-    number: number;
-    name: string;
-  }
+interface RatioConfig {
+  PENALTY: { LENGTH: number; WIDTH: number };
+  GOAL: { LENGTH: number; WIDTH: number };
+  CIRCLE: { WIDTH: number };
+  PLAYER: { SIZE: number };
+}
 
-  interface RatioConfig {
-    PENALTY: { LENGTH: number; WIDTH: number };
-    GOAL: { LENGTH: number; WIDTH: number };
-    CIRCLE: { WIDTH: number };
-    PLAYER: { SIZE: number };
-  }
+interface Player {
+  number: number;
+  name: string;
+}
 
-  type Target = 'home' | 'visitor';
+type Target = 'home' | 'visitor';
 
-  interface Props {
-    borderSize?: number;
-    receiverColor?: string;
-    visitorColor?: string;
-    borderColor?: string;
-    playerBorderColor?: string;
-    playerTextColor?: string;
-    showName?: boolean;
-    playerRatio?: number;
-    borderStyle?: string;
-    receiverSystem?: Formation
-    visitorSystem?: Formation
-    externalSize?: number;
-    orientation?: 'lanscape' | 'portrait';
-    receivers?: Player[],
-    visitors?: Player[]
-  }
+interface Props {
+  borderSize?: number;
+  receiverColor?: string;
+  visitorColor?: string;
+  borderColor?: string;
+  playerTextColor?: string;
+  showName?: boolean;
+  playerRatio?: number;
+  borderStyle?: string;
+  receiverSystem?: Formation;
+  visitorSystem?: Formation;
+  externalSize?: number;
+  orientation?: OrientationValue;
+  receivers?: Player[],
+  visitors?: Player[]
+}
 </script>
 
 <script setup lang="ts">
+
+const {
+  borderSize = 2,
+  receiverColor = '#3873b8',
+  visitorColor = '#d61e00',
+  borderColor = '#FFFFFF',
+  borderStyle = 'solid',
+  orientation = 'landscape',
+  externalSize = 10,
+  playerRatio = 0.10,
+  receiverSystem = 'S433',
+  visitorSystem = 'S433',
+  playerTextColor = '#ffffff',
+  showName = true,
+  receivers = [],
+  visitors = [],
+} = defineProps<Props>()
+
+const RATIO: RatioConfig = reactive({
+  PENALTY: { LENGTH: 0.16, WIDTH: 0.61 },
+  GOAL: { LENGTH: 0.05, WIDTH: 0.28 },
+  CIRCLE: { WIDTH: 0.14 },
+  PLAYER: { SIZE: 0.15 },
+});
+
 const systems: Record<Formation, ([number,number])[]> = reactive({
   [Formation.S433]: [
     [0.20, 0.50],
@@ -178,35 +250,54 @@ const systems: Record<Formation, ([number,number])[]> = reactive({
   ]
 })
 
-const RATIO: RatioConfig = reactive({
-  PENALTY: { LENGTH: 0.16, WIDTH: 0.61 },
-  GOAL: { LENGTH: 0.05, WIDTH: 0.28 },
-  CIRCLE: { WIDTH: 0.14 },
-  PLAYER: { SIZE: 0.15 },
-});
-
-const {
-  borderSize = 2,
-  orientation = 'landscape',
-  externalSize = 10,
-  playerRatio = 0.15,
-  receiverSystem = Formation.S433,
-  visitorSystem = Formation.S433,
-  playerTextColor = '#ffffff'
-} = defineProps<Props>()
-
 const ground = useTemplateRef<HTMLDivElement>('ground')
-const client = computed(() =>  ({w:  ground.value?.clientWidth ?? 0, h: ground.value?.clientHeight ?? 0}))
+const size = reactive({ w: 0, h: 0 })
+let resizeObserver: ResizeObserver | null = null
 
+function syncSize() {
+  size.w = ground.value?.clientWidth ?? 0
+  size.h = ground.value?.clientHeight ?? 0
+}
 
+onMounted(() => {
+  syncSize()
+  if (ground.value) {
+    resizeObserver = new ResizeObserver(syncSize)
+    resizeObserver.observe(ground.value)
+  }
+})
 
-function playerClass(index: number, player: Player, target: Target, formation: Formation) {
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+})
+
+const client = computed(() => ({ w: size.w, h: size.h }))
+
+const computedBorderStyle = computed<string>(() => `border: ${borderSize}px ${borderStyle} ${borderColor};`)
+
+const playerComputedName = computed(() => {
   const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
-  const frame = {w:zone.w * playerRatio, h:zone.h * playerRatio, x:0, y:0};
+  const font = 10 + Math.min(zone.w, zone.h) / 15 / 4;
+  return `color: ${playerTextColor}; font-size: ${font}px;`;
+})
+
+const computedCircleStyle = computed(() => {
+  const frame = {w:0, h:0, x:0, y:0};
+  const center = {x:client.value.w / 2, y:client.value.h/ 2};
+  Object.assign(frame, { w: Math.min(client.value.w, client.value.h) * RATIO.CIRCLE.WIDTH, h: Math.min(client.value.w, client.value.h) * RATIO.CIRCLE.WIDTH });
+  Object.assign(frame, { x: center.x - frame.w / 2 - borderSize, y: center.y - frame.h / 2 - borderSize});
+  return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;` + computedBorderStyle.value;
+})
+
+
+function playerClass(index: number, target: Target, formation: Formation) {
+  const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
+  const dotSize = Math.min(zone.w, zone.h) * playerRatio;
+  const frame = {w: dotSize, h: dotSize, x:0, y:0};
   const offset = {x: frame.w / 2, y: frame.h / 2};
   let style = `width: ${frame.w}px; height: ${frame.h}px;`;
 
-  const position = systems[formation][index];
+  const position = systems[formation]?.[index];
 
   if (position) {
     if (orientation === 'landscape') {
@@ -223,249 +314,79 @@ function playerClass(index: number, player: Player, target: Target, formation: F
         style += `left:${zone.w * position[1] - offset.x}px;top:${zone.h / 2 * position[0] - offset.y}px;`;
       }
     }
-    return style;
+  }
+  return style;
+}
+
+
+function playerNumberStyle(target: Target, index: number) {
+  const zone = {w:client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
+  const frame = {w:Math.min(zone.w, zone.h) / 15, h:Math.min(zone.w, zone.h) / 15, x:0, y:0};
+  const font = 8 + Math.min(zone.w, zone.h) / 15 / 4;
+  let style = `width: ${frame.w}px; height: ${frame.h}px;line-height:${frame.h}px;font-size: ${font}px;`;
+  style += `margin-top: -${frame.w / 2}px; margin-left: -${frame.h / 2}px;`;
+  if (target === 'visitor') {
+    style += `background: ${visitorColor}; border: ${borderSize}px;`;
+  } else {
+    style += `background: ${receiverColor}; border: ${borderSize}px;`;
+  }
+  // The keeper (index 0) keeps its distinct text-red-600 class from the
+  // template; only outfield players get the configurable text color,
+  // otherwise this inline style would always win over that class.
+  if (index !== 0) {
+    style += `color: ${playerTextColor};`;
+  }
+  return style;
+}
+
+function zoneFrameStyleValue(target: Target) {
+  const frame = {w:0, h:0, x:0, y:0};
+  if (orientation === 'landscape') {
+    Object.assign(frame, { x: externalSize, y: externalSize });
+    Object.assign(frame, { w: client.value.w / 2 - (externalSize + borderSize), h: client.value.h - (externalSize + borderSize) * 2 });
+    return (target === 'visitor')
+      ? `width:${frame.w + borderSize+1}px;height:${frame.h}px;top:${frame.y}px;right:${frame.x}px;`
+      : `width:${frame.w + borderSize}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
+  } else {
+    Object.assign(frame, { x: externalSize, y: frame.h + externalSize })
+    Object.assign(frame, { w: client.value.w - (externalSize + borderSize) * 2, h: client.value.h / 2 - (externalSize + borderSize) });
+    return (target === 'visitor')
+      ? `width:${frame.w}px;height:${frame.h}px;bottom:${frame.y}px;left:${frame.x}px;`
+      : `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
   }
 }
 
-const  playerComputedName = computed(() => {
-  const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
-  const frame = {w:zone.w * playerRatio, h:zone.h * playerRatio, x:0, y:0};
-  const number = {w:Math.min(zone.w, zone.h) / 15, h:Math.min(zone.w, zone.h) / 15, x:0, y:0};
-  const font = 10 + Math.min(zone.w, zone.h) / 15 / 4;
-  return `width: ${frame.w}px; height: ${font}px;color: ${playerTextColor};margin-top: ${number.w / 2 + 4}px;font-size: ${font}px;`;
-})
+function  penaltyAreaStyleValue(target: Target) {
+  const frame = {w:0, h:0, x:0, y:0};
+  const center = {x:client.value.w / 2, y:client.value.h/ 2};
+  if (orientation === 'landscape') {
+    Object.assign(frame, { w: client.value.w * RATIO.PENALTY.LENGTH - borderSize, h: client.value.h * RATIO.PENALTY.WIDTH - borderSize * 2 });
+    return (target === 'visitor')
+      ? `width:${frame.w}px;height:${frame.h}px;top:${center.y - frame.h / 2}px;left:${externalSize}px;`
+      : `width:${frame.w}px;height:${frame.h}px;top:${center.y - frame.h / 2}px;right:${externalSize}px;`;
+  }
+  else {
+    Object.assign(frame, { w: client.value.w * RATIO.PENALTY.WIDTH - borderSize, h: client.value.h * RATIO.PENALTY.LENGTH - borderSize * 2 });
+    return (target === 'visitor')
+      ? `width:${frame.w}px;height:${frame.h}px;top:${externalSize}px;left:${center.x - frame.w / 2}px;`
+      : `width:${frame.w}px;height:${frame.h}px;bottom:${externalSize}px;left:${center.x - frame.w / 2}px;`;
+  }
+}
+
+function  goalAreaStyleValue(target: Target) {
+  const frame = {w:0, h:0, x:0, y:0};
+  if (orientation === 'landscape') {
+    Object.assign(frame, { w: client.value.w * RATIO.GOAL.LENGTH - borderSize, h: client.value.h * RATIO.GOAL.WIDTH - borderSize * 2 });
+    const landscapeCenter = { x: (client.value.w * RATIO.PENALTY.LENGTH - borderSize) / 2, y: (client.value.h * RATIO.PENALTY.WIDTH - borderSize * 2) / 2 };
+    return (target === 'visitor')
+      ? `width:${frame.w}px;height:${frame.h}px;top:${landscapeCenter.y - frame.h / 2}px;left:${-borderSize}px;`
+      : `width:${frame.w}px;height:${frame.h}px;top:${landscapeCenter.y - frame.h / 2}px;right:${-borderSize}px;`;
+  } else {
+    Object.assign(frame, { w: client.value.w * RATIO.GOAL.WIDTH - borderSize, h: client.value.h * RATIO.GOAL.LENGTH - borderSize * 2 });
+    const portraitCenter = { x: (client.value.w * RATIO.PENALTY.WIDTH - borderSize) / 2, y: (client.value.h * RATIO.PENALTY.LENGTH - borderSize * 2) / 2 };
+    return (target === 'visitor')
+      ? `width:${frame.w}px;height:${frame.h}px;top:${-borderSize}px;left:${portraitCenter.x - frame.w / 2}px;`
+      : `width:${frame.w}px;height:${frame.h}px;bottom:${-borderSize}px;left:${portraitCenter.x - frame.w / 2}px`;
+  }
+}
 </script>
-
-<script>
-
-import {SYSTEMS} from "../enums/system";
-import {ORIENTATION} from "../enums/orientation";
-
-
-const ZONE = {
-  RECEIVER : 'receiver',
-  VISITOR : 'visitor',
-}
-
-const RATIO = {
-  PENALTY : {
-    LENGTH: 0.16,
-    WIDTH: 0.61,
-  },
-  GOAL : {
-    LENGTH: 0.05,
-    WIDTH: 0.28,
-  },
-  CIRCLE : {
-    WIDTH: 0.14,
-  },
-  PLAYER: {
-    SIZE: 0.15,
-  }
-}
-
-export default {
-  name: "vue-soccer-field",
-  data() {
-    return {
-      ground: null,
-      frames: {
-        player: null,
-      },
-      systems: SYSTEMS,
-      backgroundUrl,
-    }
-  },
-  mounted() {
-    this.ground = this.$refs.ground;
-  },
-  created() {
-  },
-  computed: {
-    client() {
-      if(null !== this.ground) {
-        return {
-          w: this.$refs.ground.clientWidth,
-          h: this.$refs.ground.clientHeight
-        };
-      }
-      return {w: 0, h: 0};
-    },
-  },
-  methods: {
-    playerNameStyle() {
-      const zone = {w:this.client.w - this.externalSize * 2 - this.borderSize * 2, h:this.client.h - this.externalSize * 2 - this.borderSize * 2, x:0, y:0};
-      const frame = {w:zone.w * this.playerRatio, h:zone.h * this.playerRatio, x:0, y:0};
-      const number = {w:Math.min(zone.w, zone.h) / 15, h:Math.min(zone.w, zone.h) / 15, x:0, y:0};
-      const font = 10 + Math.min(zone.w, zone.h) / 15 / 4;
-      let style = `width: ${frame.w}px; height: ${font}px;`;
-      style += `position: absolute;`;
-      style += `top: 50%;`;
-      style += `margin-top: ${number.w / 2 + 4}px;`;
-      style += `color: ${this.playerTextColor};text-align: bottom;line-height:100%;`;
-      style += `z-index: 10;`;
-      style += `font-size: ${font}px; font-weight: 400;`;
-      return style;
-    },
-    playerNumberStyle(index, player, target) {
-      const zone = {w:this.client.w - this.externalSize * 2 - this.borderSize * 2, h:this.client.h - this.externalSize * 2 - this.borderSize * 2, x:0, y:0};
-      const frame = {w:Math.min(zone.w, zone.h) / 15, h:Math.min(zone.w, zone.h) / 15, x:0, y:0};
-      const font = 8 + Math.min(zone.w, zone.h) / 15 / 4;
-      let style = `width: ${frame.w}px; height: ${frame.h}px;`;
-      style += `position: absolute;`;
-      style += `top: 50%; left: 50%;`;
-      style += `margin-top: -${frame.w / 2}px; margin-left: -${frame.h / 2}px;`;
-      switch (target) {
-        case ZONE.VISITOR:
-          style += `background: ${this.visitorColor}; border: ${this.borderSize}px solid ${this.playerBorderColor};`;
-          break;
-        default:
-          style += `background: ${this.receiverColor}; border: ${this.borderSize}px solid ${this.playerBorderColor};`;
-      }
-      style += `color: ${this.playerTextColor};text-align: center;line-height:${frame.h}px;`;
-      style += `font-size: ${font}px; font-weight: bold;`;
-      style += `padding: 0px;`;
-      return style;
-    },
-    zoneStyle(target) {
-      return `${this.zoneFrameStyleValue(target)}${this.borderStyleValue()}`;
-    },
-    penaltyAreaStyle(target) {
-      return `${this.penaltyAreaStyleValue(target)}${this.borderStyleValue()}`;
-    },
-    goalAreaStyle(target) {
-      return `${this.goalAreaStyleValue(target)}${this.borderStyleValue()}`;
-    },
-    circleStyle() {
-      return `${this.circleStyleValue()}${this.borderStyleValue()}${this.radiusStyleValue()}`;
-    },
-    zoneFrameStyleValue(target) {
-      const frame = {w:0, h:0, x:0, y:0};
-      switch (this.orientation) {
-        case ORIENTATION.LANDSCAPE:
-          Object.assign(frame, { x: this.externalSize, y: this.externalSize });
-          Object.assign(frame, { w: this.client.w / 2 - (this.externalSize + this.borderSize), h: this.client.h - (this.externalSize + this.borderSize) * 2 });
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;right:${frame.x}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
-          }
-        default:
-          Object.assign(frame, { x: this.externalSize, y: frame.h + this.externalSize })
-          Object.assign(frame, { w: this.client.w - (this.externalSize + this.borderSize) * 2, h: this.client.h / 2 - (this.externalSize + this.borderSize) });
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;bottom:${frame.y}px;left:${frame.x}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
-          }
-      }
-    },
-    penaltyAreaStyleValue(target) {
-      const frame = {w:0, h:0, x:0, y:0};
-      const center = {x:this.client.w / 2, y:this.client.h/ 2};
-      switch (this.orientation) {
-        case ORIENTATION.LANDSCAPE:
-          Object.assign(frame, { w: this.client.w * RATIO.PENALTY.LENGTH - this.borderSize, h: this.client.h * RATIO.PENALTY.WIDTH - this.borderSize * 2 });
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;top:${center.y - frame.h / 2}px;left:${this.externalSize}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;top:${center.y - frame.h / 2}px;right:${this.externalSize}px;`;
-          }
-        default:
-          Object.assign(frame, { w: this.client.w * RATIO.PENALTY.WIDTH - this.borderSize, h: this.client.h * RATIO.PENALTY.LENGTH - this.borderSize * 2 });
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;top:${this.externalSize}px;left:${center.x - frame.w / 2}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;bottom:${this.externalSize}px;left:${center.x - frame.w / 2}px;`;
-          }
-      }
-    },
-    goalAreaStyleValue(target) {
-      const frame = {w:0, h:0, x:0, y:0};
-      switch (this.orientation) {
-        case ORIENTATION.LANDSCAPE:
-          Object.assign(frame, { w: this.client.w * RATIO.GOAL.LENGTH - this.borderSize, h: this.client.h * RATIO.GOAL.WIDTH - this.borderSize * 2 });
-          const landcapeCenter = { x: (this.client.w * RATIO.PENALTY.LENGTH - this.borderSize) / 2, y: (this.client.h * RATIO.PENALTY.WIDTH - this.borderSize * 2) / 2 };
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;top:${landcapeCenter.y - frame.h / 2}px;left:${-this.borderSize}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;top:${landcapeCenter.y - frame.h / 2}px;right:${-this.borderSize}px;`;
-          }
-        default:
-          Object.assign(frame, { w: this.client.w * RATIO.GOAL.WIDTH - this.borderSize, h: this.client.h * RATIO.GOAL.LENGTH - this.borderSize * 2 });
-          const portraitCenter = { x: (this.client.w * RATIO.PENALTY.WIDTH - this.borderSize) / 2, y: (this.client.h * RATIO.PENALTY.LENGTH - this.borderSize * 2) / 2 };
-          switch (target) {
-            case ZONE.VISITOR:
-              return `width:${frame.w}px;height:${frame.h}px;top:${-this.borderSize}px;left:${portraitCenter.x - frame.w / 2}px;`;
-            default:
-              return `width:${frame.w}px;height:${frame.h}px;bottom:${-this.borderSize}px;left:${portraitCenter.x - frame.w / 2}px;`;
-          }
-      }
-    },
-    circleStyleValue() {
-      const frame = {w:0, h:0, x:0, y:0};
-      const center = {x:this.client.w / 2, y:this.client.h/ 2};
-      Object.assign(frame, { w: Math.min(this.client.w, this.client.h) * RATIO.CIRCLE.WIDTH, h: Math.min(this.client.w, this.client.h) * RATIO.CIRCLE.WIDTH });
-      Object.assign(frame, { x: center.x - frame.w / 2 - this.borderSize, y: center.y - frame.h / 2 - this.borderSize});
-      return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
-    },
-    borderStyleValue() {
-      return `border: ${this.borderSize}px ${this.borderStyle} ${this.borderColor};`;
-    },
-    radiusStyleValue() {
-      return 'border-radius: 50%;';
-    },
-  }
-};
-</script>
-<style>
-
-.ground {
-  background-color: #238729;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.zone {
-  position: absolute;
-}
-
-.penalty-area {
-  position: absolute;
-}
-
-.goal-area{
-  position: absolute;
-}
-
-.center-area {
-  position: absolute;
-}
-
-.player {
-  position: absolute;
-  font-family: Questrial, sans-serif;
-  text-align:center;
-  display: inline;
-  // background-color: coral;
-}
-
-.player-number {
-  border-radius: 50%;
-  text-align:center;
-  display: table;
-  margin: 0 auto;
-}
-
-.player-name {
-  text-align:center;
-  // background-color: aquamarine;
-}
-
-</style>
