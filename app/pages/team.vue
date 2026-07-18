@@ -25,8 +25,7 @@ const receivers = [
 <template>
   <div class="mx-auto max-w-6xl px-4 py-12">
     <h1 class="mb-8 text-3xl font-bold text-primary-500">Η Ομάδα</h1>
-
-    <LayoutsSoccerField orientation="landscape"  :receivers="receivers" :visitors="receivers"  class="w-full h-125" />
+    <LayoutsSoccerField orientation="landscape"  :receivers="receivers" class="w-full h-125" />
     <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
       <div
         v-for="(s, i) in players"

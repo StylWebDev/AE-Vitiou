@@ -1,14 +1,13 @@
 <template>
-  <div ref="ground" class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg ring-2 mb-16 ring-white bg-center bg-[url('https://www.sketchuptextureclub.com/public/texture_m/0097-football-green-grass-texture-seamless.jpg')]">
+  <div ref="ground" class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg ring-2 mb-16 ring-white bg-center bg-[url('https://pub-a65a191fa4d14606aec83a6b14268769.r2.dev/pitch.webp')]">
     <div class="zone absolute z-10 border border-white" :style="[zoneFrameStyleValue('home')]">
       <div class="receiver-team">
-        <div v-for="(player, index) in receivers" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-gray-500! data-[captain=true]:ring data-[captain=true]:ring-white absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full  transition-all duration-700 ease-linear" :style="[playerClass(index, 'home', receiverSystem), `background:${receiverColor};`]">
-          <div  class="player-number group-data-[captain=true]:text-red-600 group-data-[captain=true]:bg-gray-500! absolute top-[85%] left-[85%] p-0 rounded-2xl table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('home', player)">
+        <div v-for="(player, index) in receivers" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-gray-500! data-[captain=true]:ring data-[captain=true]:ring-orange-500 absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full  transition-all duration-700 ease-linear" :style="[playerClass(index, 'home', receiverSystem), `background:${receiverColor};`]">
+          <div  class="player-number group-data-[captain=true]:text-orange-600 group-data-[captain=true]:bg-gray-500! absolute top-[85%] left-[85%] p-0 rounded-2xl table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('home', player)">
             {{player.number}}
           </div>
-
           <div v-if="showName" class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap" :style="playerComputedName">
-            {{player.name}}
+            {{player.name}}<sup v-if="player.isCaptain" class="text-xs text-orange-600 font-medium">(c)</sup>
           </div>
         </div>
       </div>
@@ -26,12 +25,12 @@
 
     <div class="zone absolute z-10 border border-white" :style="[zoneFrameStyleValue('visitor')]">
       <div class="visitor-team">
-        <div v-for="(player, index) in visitors" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-cyan-400! data-[captain=true]:ring data-[captain=true]:ring-white absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full transition-all duration-700 ease-linear" :style="[playerClass(index, 'visitor', visitorSystem), `background:${visitorColor};`]">
-          <div class="player-number group-data-[captain=true]:text-red-600 group-data-[captain=true]:bg-cyan-400! absolute top-[85%] left-[85%] p-0 table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('visitor', player)">
+        <div v-for="(player, index) in visitors" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-cyan-400! data-[captain=true]:ring data-[captain=true]:ring-indigo-700 absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full transition-all duration-700 ease-linear" :style="[playerClass(index, 'visitor', visitorSystem), `background:${visitorColor};`]">
+          <div class="player-number group-data-[captain=true]:text-indigo-700 group-data-[captain=true]:bg-cyan-400! absolute top-[85%] left-[85%] p-0 table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('visitor', player)">
             {{player.number}}
           </div>
           <div v-if="showName" class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap" :style="playerComputedName">
-            {{player.name}}
+            {{player.name}}<sup v-if="player.isCaptain" class="text-xs text-indigo-700">(c)</sup>
           </div>
         </div>
       </div>
@@ -56,7 +55,6 @@ interface RatioConfig {
   PENALTY: { LENGTH: number; WIDTH: number };
   GOAL: { LENGTH: number; WIDTH: number };
   CIRCLE: { WIDTH: number };
-  PLAYER: { SIZE: number };
 }
 
 interface Player {
@@ -104,7 +102,6 @@ const RATIO: RatioConfig = reactive({
   PENALTY: { LENGTH: 0.16, WIDTH: 0.61 },
   GOAL: { LENGTH: 0.05, WIDTH: 0.28 },
   CIRCLE: { WIDTH: 0.14 },
-  PLAYER: { SIZE: 0.15 },
 });
 
 const systems: Record<Formation, ([number,number])[]> = reactive({
