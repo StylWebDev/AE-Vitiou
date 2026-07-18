@@ -1,82 +1,38 @@
 <template>
-  <div
-    ref="ground"
-    class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg bg-center bg-[image:var(--field-background)]"
-    :style="{ '--field-background': `url('${background}')` }"
-  >
-    <div class="zone absolute" :style="[zoneFrameStyleValue('home'), computedBorderStyle]">
+  <div ref="ground" class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg ring-2 mb-16 ring-white bg-center bg-[url('https://www.sketchuptextureclub.com/public/texture_m/0097-football-green-grass-texture-seamless.jpg')]">
+    <div class="zone absolute z-10 border border-white" :style="[zoneFrameStyleValue('home')]">
       <div class="receiver-team">
-        <div
-          v-for="(player, index) in receivers"
-          :key="index"
-          class="player absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full
-               [animation-duration:5s] [animation-timing-function:linear] [animation-delay:2s]
-               [animation-iteration-count:infinite] [animation-direction:alternate] [animation-play-state:running]"
-          :class="index === 0 ? 'bg-gray-500' : ''"
-          :style="[playerClass(index, 'home', receiverSystem), index === 0 ? '' : `background:${receiverColor};`]"
-        >
-          <div
-            class="player-number absolute top-[85%] left-[85%] p-0 rounded-2xl table my-0 mx-auto text-center font-bold
-                 border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none"
-            :class="index === 0 ? 'text-red-600 bg-gray-500!' : 'text-black'"
-            :style="playerNumberStyle('home', index)"
-          >{{player.number}}</div>
-          <div
-            v-if="showName"
-            class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap"
-            :style="playerComputedName"
-          ><span>{{player.name}}</span></div>
+        <div v-for="(player, index) in receivers" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-gray-500! data-[captain=true]:ring data-[captain=true]:ring-white absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full  transition-all duration-700 ease-linear" :style="[playerClass(index, 'home', receiverSystem), `background:${receiverColor};`]">
+          <div  class="player-number group-data-[captain=true]:text-red-600 group-data-[captain=true]:bg-gray-500! absolute top-[85%] left-[85%] p-0 rounded-2xl table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('home', player)">
+            {{player.number}}
+          </div>
+
+          <div v-if="showName" class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap" :style="playerComputedName">
+            {{player.name}}
+          </div>
         </div>
       </div>
     </div>
 
-    <div
-      class="penalty-area absolute border border-white
-           after:content-[''] after:absolute after:block after:bg-white after:w-0.5 after:h-0.5
-           after:top-17.5 after:right-3.75"
-      :style="[penaltyAreaStyleValue('home'), computedBorderStyle]"
-    >
-      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('home'), computedBorderStyle]" />
+    <div class="penalty-area absolute border border-white after:absolute after:block after:bg-white after:w-0.5 after:h-0.5 after:top-1/2 after:right-1/2" :style="[penaltyAreaStyleValue('home')]">
+      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('home')]" />
     </div>
 
-    <div
-      class="center-area absolute rounded-full border border-white
-           after:content-[''] after:absolute after:block after:bg-white after:border after:border-white
-           after:top-1/2 after:left-1/2 after:w-px after:h-px"
-      :style="computedCircleStyle"
-    />
+    <div class="center-area absolute rounded-full border border-white after:absolute after:block after:bg-white after:border after:border-white  after:top-1/2 after:left-1/2 after:w-px after:h-px" :style="computedCircleStyle"/>
 
-    <div
-      class="penalty-area absolute border border-white
-           after:content-[''] after:absolute after:block after:bg-white after:w-0.5 after:h-0.5
-           after:top-17.5 after:left-3.75"
-      :style="[penaltyAreaStyleValue('visitor'), computedBorderStyle]"
-    >
-      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('visitor'), computedBorderStyle]" />
+    <div class="penalty-area absolute border z-0 border-white after:absolute after:block after:bg-white after:w-0.5 after:h-0.5 after:top-1/2 after:left-1/2" :style="[penaltyAreaStyleValue('visitor')]">
+      <div class="goal-area absolute border border-white" :style="[goalAreaStyleValue('visitor')]" />
     </div>
 
-    <div class="zone absolute" :style="[zoneFrameStyleValue('visitor'), computedBorderStyle]">
+    <div class="zone absolute z-10 border border-white" :style="[zoneFrameStyleValue('visitor')]">
       <div class="visitor-team">
-        <div
-          v-for="(player, index) in visitors"
-          :key="index"
-          class="player absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full
-               [animation-duration:5s] [animation-timing-function:linear] [animation-delay:2s]
-               [animation-iteration-count:infinite] [animation-direction:alternate] [animation-play-state:running]"
-          :class="index === 0 ? 'bg-cyan-400' : ''"
-          :style="[playerClass(index, 'visitor', visitorSystem), index === 0 ? '' : `background:${visitorColor};`]"
-        >
-          <div
-            class="player-number absolute top-1/2 left-1/2 p-0 table my-0 mx-auto text-center font-bold
-                 border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none"
-            :class="index === 0 ? 'text-red-600' : 'text-white'"
-            :style="playerNumberStyle('visitor', index)"
-          >{{player.number}}</div>
-          <div
-            v-if="showName"
-            class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap"
-            :style="playerComputedName"
-          >{{player.name}}</div>
+        <div v-for="(player, index) in visitors" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-cyan-400! data-[captain=true]:ring data-[captain=true]:ring-white absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full transition-all duration-700 ease-linear" :style="[playerClass(index, 'visitor', visitorSystem), `background:${visitorColor};`]">
+          <div class="player-number group-data-[captain=true]:text-red-600 group-data-[captain=true]:bg-cyan-400! absolute top-[85%] left-[85%] p-0 table my-0 mx-auto text-center font-bold border-white border-solid -translate-x-1/2 -translate-y-1/2 text-[10px] leading-none transition-all duration-700 ease-linear" :style="playerNumberStyle('visitor', player)">
+            {{player.number}}
+          </div>
+          <div v-if="showName" class="player-name absolute left-1/2 -translate-x-1/2 bottom-full mb-1 z-10 font-normal text-center leading-[100%] whitespace-nowrap" :style="playerComputedName">
+            {{player.name}}
+          </div>
         </div>
       </div>
     </div>
@@ -84,8 +40,6 @@
 </template>
 
 <script lang="ts">
-import background from '~/assets/grass.png';
-
 enum Formation {
   S433 = 'S433',
   S343 = 'S343',
@@ -108,6 +62,7 @@ interface RatioConfig {
 interface Player {
   number: number;
   name: string;
+  isCaptain?: boolean;
 }
 
 type Target = 'home' | 'visitor';
@@ -116,11 +71,9 @@ interface Props {
   borderSize?: number;
   receiverColor?: string;
   visitorColor?: string;
-  borderColor?: string;
   playerTextColor?: string;
   showName?: boolean;
   playerRatio?: number;
-  borderStyle?: string;
   receiverSystem?: Formation;
   visitorSystem?: Formation;
   externalSize?: number;
@@ -136,13 +89,11 @@ const {
   borderSize = 2,
   receiverColor = '#3873b8',
   visitorColor = '#d61e00',
-  borderColor = '#FFFFFF',
-  borderStyle = 'solid',
   orientation = 'landscape',
   externalSize = 10,
   playerRatio = 0.10,
-  receiverSystem = 'S433',
-  visitorSystem = 'S433',
+  receiverSystem = Formation.S433,
+  visitorSystem = Formation.S433,
   playerTextColor = '#ffffff',
   showName = true,
   receivers = [],
@@ -273,8 +224,6 @@ onBeforeUnmount(() => {
 
 const client = computed(() => ({ w: size.w, h: size.h }))
 
-const computedBorderStyle = computed<string>(() => `border: ${borderSize}px ${borderStyle} ${borderColor};`)
-
 const playerComputedName = computed(() => {
   const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
   const font = 10 + Math.min(zone.w, zone.h) / 15 / 4;
@@ -286,9 +235,8 @@ const computedCircleStyle = computed(() => {
   const center = {x:client.value.w / 2, y:client.value.h/ 2};
   Object.assign(frame, { w: Math.min(client.value.w, client.value.h) * RATIO.CIRCLE.WIDTH, h: Math.min(client.value.w, client.value.h) * RATIO.CIRCLE.WIDTH });
   Object.assign(frame, { x: center.x - frame.w / 2 - borderSize, y: center.y - frame.h / 2 - borderSize});
-  return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;` + computedBorderStyle.value;
+  return `width:${frame.w}px;height:${frame.h}px;top:${frame.y}px;left:${frame.x}px;`;
 })
-
 
 function playerClass(index: number, target: Target, formation: Formation) {
   const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
@@ -318,8 +266,7 @@ function playerClass(index: number, target: Target, formation: Formation) {
   return style;
 }
 
-
-function playerNumberStyle(target: Target, index: number) {
+function playerNumberStyle(target: Target, player: Player) {
   const zone = {w:client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
   const frame = {w:Math.min(zone.w, zone.h) / 15, h:Math.min(zone.w, zone.h) / 15, x:0, y:0};
   const font = 8 + Math.min(zone.w, zone.h) / 15 / 4;
@@ -330,10 +277,8 @@ function playerNumberStyle(target: Target, index: number) {
   } else {
     style += `background: ${receiverColor}; border: ${borderSize}px;`;
   }
-  // The keeper (index 0) keeps its distinct text-red-600 class from the
-  // template; only outfield players get the configurable text color,
-  // otherwise this inline style would always win over that class.
-  if (index !== 0) {
+
+  if (!player.isCaptain) {
     style += `color: ${playerTextColor};`;
   }
   return style;

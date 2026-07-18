@@ -16,7 +16,7 @@ const receivers = [
   {number: 6, name: 'Matthaus'},
   {number: 7, name: 'Christiano'},
   {number: 8, name: 'Pelé'},
-  {number: 9, name: 'Ronaldo'},
+  {number: 9, name: 'Ronaldo', isCaptain: true},
   {number: 10, name: 'Maradona'},
   {number: 11, name: 'Messi'},
 ]
@@ -26,7 +26,7 @@ const receivers = [
   <div class="mx-auto max-w-6xl px-4 py-12">
     <h1 class="mb-8 text-3xl font-bold text-primary-500">Η Ομάδα</h1>
 
-    <LayoutsSoccerField orientation="landscape"  :receivers="receivers"  style="width: 100%; height: 440px;" />
+    <LayoutsSoccerField orientation="landscape"  :receivers="receivers" :visitors="receivers"  class="w-full h-125" />
     <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
       <div
         v-for="(s, i) in players"
