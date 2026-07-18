@@ -202,27 +202,8 @@ const systems: Record<Formation, ([number,number])[]> = reactive({
 })
 
 const ground = useTemplateRef<HTMLDivElement>('ground')
-const size = reactive({ w: 0, h: 0 })
-let resizeObserver: ResizeObserver | null = null
 
-function syncSize() {
-  size.w = ground.value?.clientWidth ?? 0
-  size.h = ground.value?.clientHeight ?? 0
-}
-
-onMounted(() => {
-  syncSize()
-  if (ground.value) {
-    resizeObserver = new ResizeObserver(syncSize)
-    resizeObserver.observe(ground.value)
-  }
-})
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-})
-
-const client = computed(() => ({ w: size.w, h: size.h }))
+const client = ref({ w: 0, h: 0 })
 
 const playerComputedName = computed(() => {
   const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
@@ -334,4 +315,9 @@ function  goalAreaStyleValue(target: Target) {
       : `width:${frame.w}px;height:${frame.h}px;bottom:${-borderSize}px;left:${portraitCenter.x - frame.w / 2}px`;
   }
 }
+
+watch(() => [ground.value?.clientWidth, ground.value?.clientHeight], ([w, h]) => {
+  client.value.w = w ?? 0
+  client.value.h = h ?? 0
+}, {immediate: true})
 </script>

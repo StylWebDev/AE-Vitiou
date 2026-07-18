@@ -50,7 +50,7 @@ const thrillers = [
           <UBadge color="warning" variant="subtle" class="mb-6 rounded-2xl uppercase tracking-widest">
             Ολοκληρώθηκε · {{ champion.period }}
           </UBadge>
-          <img src="/logo.webp" alt="ΑΕ Βιτσιου" class="my-4 h-24 w-24 object-contain" />
+          <NuxtImg src="/logo.webp" alt="ΑΕ Βιτσιου" class="my-4 h-24 w-24 object-contain" />
           <h1 class="text-4xl font-black italic uppercase tracking-tight sm:text-6xl">{{ champion.club }}</h1>
           <p class="mt-2 text-sm uppercase tracking-widest text-white/60">{{ champion.tournament }}</p>
 
@@ -86,7 +86,7 @@ const thrillers = [
         <UPageFeature icon="lucide:bar-chart-3" title="Μπάλα είναι και γυρίζει" description="ΟΙ ΤΕΛΕΥΤΑΙΟΙ 5 ΑΓΏΝΕΣ"/>
         <div class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
           <div
-            v-for="(r, i) in road"
+            v-for="r in road"
             :key="r.round"
             class="flex items-center justify-between gap-4 p-5 "
           >
@@ -103,7 +103,7 @@ const thrillers = [
         <UPageFeature icon="lucide:bar-chart-3" title="Σπάσε τα δύχτια" description="ΟΙ ΣΚΟΡΕΡ ΤΗΣ ΟΜΑΔΑΣ"/>
         <div class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
           <div
-            v-for="(s, i) in scorers"
+            v-for="s in scorers"
             :key="s.rank"
             class="flex items-center gap-4 p-5"
           >
