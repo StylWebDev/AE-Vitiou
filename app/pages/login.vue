@@ -1,14 +1,14 @@
 <template>
   <div class="size-full flex justify-center items-center">
     <UForm ref="form" :schema="schema" :state="state" class="p-4 ring ring-primary-700 bg-primary-900 rounded-2xl space-y-4" @submit.prevent="login" >
-      <UEmpty :avatar="{ icon: `material-symbols:deployed-code-account`, color: 'primary'}" size="xl" variant="naked" title="Σύνδεση Χρήστη" description="Η σύνδεση είναι δυνατή μόνο για τους διαχειριστές της ΑΕ-Βιτσίου και του developer της σελίδας" :ui="{title: 'text-primary', description: 'text-primary-300'}" />
+      <UEmpty :avatar="{ icon: `material-symbols:deployed-code-account`, color: 'secondary'}" size="xl" variant="naked" title="Σύνδεση Χρήστη" description="Η σύνδεση είναι δυνατή μόνο για τους διαχειριστές της ΑΕ-Βιτσίου και του developer της σελίδας" :ui="{title: 'text-secondary', description: 'text-primary-300'}" />
       <UFormField size="lg" name="email" label="Em@il" required :ui="{label: 'text-primary-100'}" >
-        <UInput v-model="state.email" class="w-full" :ui="{base: 'bg-primary-950'}"/>
+        <UInput v-model="state.email" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
       </UFormField>
       <UFormField size="lg" name="password" label="Κωδικός Πρόσβασης" required :ui="{label: 'text-primary-100'}">
-        <UInput v-model="state.password" type="password" class="w-full" :ui="{base: 'bg-primary-950'}"/>
+        <UInput v-model="state.password" type="password" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
       </UFormField>
-      <UButton label="Σύνδεση" class="w-full justify-center" @click="form?.submit()"  />
+      <UButton label="Σύνδεση" class="w-full justify-center cursor-pointer" @click="form?.submit()"  />
     </UForm>
   </div>
 </template>
@@ -41,7 +41,7 @@ function login() {
       body: state,
     }).then((_) => {
        fetch()
-       navigateTo('/sudo')
+       navigateTo('/')
      }).catch(() => {
        console.debug(`Error while trying to log In`)
        toast.add({

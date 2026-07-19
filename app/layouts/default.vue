@@ -6,10 +6,10 @@
         <UAvatar src="/logo.webp" size="3xl" />
       </template>
 
-      <UButton v-for="route in pages" :key="route.label" v-bind="route" variant="link" color="secondary" active-color="secondary" active-variant="subtle" />
+      <UButton v-for="route in pages" :key="route.label" v-bind="route" variant="link" color="warning"  active-variant="subtle"  />
 
       <template #right>
-        <UButton to="/sudo" variant="ghost" color="secondary" icon="material-symbols:person-shield-rounded"/>
+        <UButton variant="ghost" color="secondary" :label="loggedIn ? 'Αποσύνδεση' : 'Σύνδεση'" :icon="loggedIn ? `ri:shut-down-line` : `material-symbols:person-shield-rounded`" :ui="{label: 'hidden lg:block'}" class="cursor-pointer" @click="handleLog"/>
       </template>
 
       <LayoutsDrawer v-model="open" :routes="pages"/>
@@ -41,6 +41,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, ButtonProps } from '@nuxt/ui'
 
+const {loggedIn, clear: signOut} = useUserSession();
 const pages = [
   { label: 'Αρχική', icon: 'game-icons:soccer-ball', to: '/' },
   { label: 'Αγώνες', icon: 'streamline-ultimate:soccer-field-bold', to: '/matches' },
@@ -76,6 +77,13 @@ const socialLinks: ButtonProps[] = [
     target: '_blank',
   }
 ]
+
+async function handleLog() {
+  if (loggedIn) {
+    await signOut();
+  }
+  await navigateTo('/login')
+}
 
 const open = ref(false)
 </script>

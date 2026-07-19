@@ -10,13 +10,17 @@ const posts = [
 
 <template>
   <div class="mx-auto max-w-4xl px-4 py-12">
-    <h1 class="mb-8 text-3xl font-bold text-primary-500">Blog</h1>
+    <UPageFeature icon="streamline-sharp:paragraph-article-solid" title="ΤΑ ΝΕΑ ΜΑΣ" description="ΤΟ BLOG ΤΗΣ ΟΜΑΔΑΣ"/>
+
     <div class="grid gap-6 md:grid-cols-2">
-      <UCard v-for="(p, i) in posts" :key="i" class="transition hover:shadow-lg">
-        <p class="text-xs uppercase tracking-wider text-muted">{{ p.date }}</p>
-        <h2 class="mt-1 text-lg font-bold">{{ p.title }}</h2>
-        <p class="mt-2 text-sm text-muted">{{ p.excerpt }}</p>
-        <UButton label="Διαβάστε περισσότερα" variant="link" color="primary" class="mt-2 px-0" trailing-icon="lucide:arrow-right" />
+      <UCard v-for="(p, i) in posts" :key="i" variant="soft"  class="transition divide-y-0 hover:shadow-lg ring ring-primary-700 bg-primary-900 rounded-2xl" :ui="{header: 'p-0 sm:px-0'}">
+        <template #header>
+          <NuxtImg src="" class="w-full max-h-50 rounded-t-2xl"/>
+        </template>
+        <p class="text-xs uppercase tracking-wider text-primary-300">{{ p.date }}</p>
+        <h2 class="mt-1 text-lg font-bold text-white">{{ p.title }}</h2>
+        <p class="mt-2 text-sm text-primary-100">{{ p.excerpt }}</p>
+        <UButton label="Διαβάστε περισσότερα" variant="link" color="warning" class="mt-2 px-0" trailing-icon="lucide:arrow-right" />
       </UCard>
     </div>
   </div>

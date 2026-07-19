@@ -2,9 +2,11 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui',
+    '@nuxthub/core',
     'nuxt-auth-utils',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/ui',
+    '@nuxt/image'
   ],
 
   devtools: {
@@ -15,9 +17,39 @@ export default defineNuxtConfig({
     dirs: ['types', 'utils'],
     presets: [
       { from: 'zod', imports: [['*', 'zod']] },
-      { from: 'zod', imports: [['output', 'ZodOutput']], type: true }
+      { from: 'zod', imports: [['output', 'ZodOutput']], type: true },
+      {
+        from: '@vueuse/core',
+        imports: ['breakpointsTailwind', 'useBreakpoints']
+      }
     ]
   },
+
+  $development: {
+    hub: {
+      db: {
+        dialect: 'sqlite'
+      }
+    }
+  },
+
+  $production: {
+    hub: {
+      db: {
+        dialect: 'sqlite',
+        driver: 'd1',
+        connection: {
+          databaseId: process.env.NUXT_HUB_CLOUDFLARE_DB_ID
+        }
+      },
+      blob: {
+        driver: 'cloudflare-r2',
+        bucketName: process.env.NUXT_HUB_CLOUDFLARE_BUCKET_ID
+      }
+
+    },
+  },
+
 
   colorMode: {
     preference: 'dark',

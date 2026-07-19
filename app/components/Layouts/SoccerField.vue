@@ -1,5 +1,5 @@
 <template>
-  <div ref="ground" class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg ring-2 mb-16 ring-white bg-center bg-[url('https://pub-a65a191fa4d14606aec83a6b14268769.r2.dev/pitch.webp')]">
+  <div ref="ground" class="ground bg-[#238729] size-full relative bg-size-[20%] rounded-lg ring-2 ring-white bg-center bg-[url('https://pub-a65a191fa4d14606aec83a6b14268769.r2.dev/pitch.webp')]">
     <div class="zone absolute z-10 border border-white" :style="[zoneFrameStyleValue('home')]">
       <div class="receiver-team">
         <div v-for="(player, index) in receivers" :key="index" :data-captain="player.isCaptain" class="player group data-[captain=true]:bg-gray-500! data-[captain=true]:ring data-[captain=true]:ring-orange-500 absolute text-center inline font-['Questrial',sans-serif] w-2.5 h-2.5 rounded-full  transition-all duration-700 ease-linear" :style="[playerClass(index, 'home', receiverSystem), `background:${receiverColor};`]">
@@ -199,8 +199,28 @@ const systems: Record<Formation, ([number,number])[]> = reactive({
 })
 
 const ground = useTemplateRef<HTMLDivElement>('ground')
+const size = reactive({ w: 0, h: 0 })
+let resizeObserver: ResizeObserver | null = null
 
-const client = ref({ w: 0, h: 0 })
+function syncSize() {
+size.w = ground.value?.clientWidth ?? 0
+size.h = ground.value?.clientHeight ?? 0
+}
+
+onMounted(() => {
+  syncSize()
+  if (ground.value) {
+    resizeObserver = new ResizeObserver(syncSize)
+    resizeObserver.observe(ground.value)
+  }
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+})
+
+const client = computed(() => ({ w: size.w, h: size.h }))
+
 
 const playerComputedName = computed(() => {
   const zone = {w: client.value.w - externalSize * 2 - borderSize * 2, h:client.value.h - externalSize * 2 - borderSize * 2, x:0, y:0};
@@ -313,8 +333,4 @@ function  goalAreaStyleValue(target: Target) {
   }
 }
 
-watch(() => [ground.value?.clientWidth, ground.value?.clientHeight], ([w, h]) => {
-  client.value.w = w ?? 0
-  client.value.h = h ?? 0
-}, {immediate: true})
 </script>
