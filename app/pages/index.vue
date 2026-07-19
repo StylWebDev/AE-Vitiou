@@ -12,32 +12,34 @@ const champion = {
 }
 
 const stats = [
-  { icon: 'lucide:users', value: '16', label: 'Ομάδες' },
   { icon: 'lucide:swords', value: '43', label: 'Αγώνες' },
+  { icon: 'famicons:football', value: '30', label: 'Νίκες' },
   { icon: 'maki:soccer-11', value: '128', label: 'Γκολ' },
-  { icon: 'lucide:flame', value: '3.0', label: 'Μ.Ο. Γκολ/Αγώνα' },
-  { icon: 'lucide:trophy', value: '1', label: 'Τίτλος' },
-  { icon: 'lucide:calendar', value: '9', label: 'Ημέρες Δράσης' }
+  { icon: 'lucide:flame', value: '22', label: 'Βαθμοί' },
+  { icon: 'lucide:trophy', value: '1', label: 'Τίτλοι' },
 ]
 
 const road = [
   { round: 'Προημιτελικός', opp: 'Νικολάου FC', score: '5–1' },
   { round: 'Ημιτελικός', opp: 'Drink Team', score: '3–2' },
+  { round: 'Τελικός', opp: 'Αντίπαλος ΦΣ', score: '3–1' },
+  { round: 'Ημιτελικός', opp: 'Drink Team', score: '3–2' },
   { round: 'Τελικός', opp: 'Αντίπαλος ΦΣ', score: '3–1' }
 ]
 
 const scorers = [
-  { rank: 1, name: 'Σπύρος Καραβασιλης', club: 'ΑΕ Βιτσιου', goals: 18 },
-  { rank: 2, name: 'Θωμάς Σταμούλης', club: 'ΑΕ Βιτσιου', goals: 12 },
-  { rank: 3, name: 'Μιχάλης Μίχος', club: 'ΑΕ Βιτσιου', goals: 9 },
-  { rank: 4, name: 'Βαγγέλης Γακιας', club: 'ΑΕ Βιτσιου', goals: 7 },
-  { rank: 5, name: 'Βασίλης Εστιαδης', club: 'ΑΕ Βιτσιου', goals: 6 }
+  { rank: 1, name: 'Σπύρος Καραβασιλης', club: 'FDW', goals: 18 },
+  { rank: 2, name: 'Θωμάς Σταμούλης', club: 'FDW', goals: 12 },
+  { rank: 3, name: 'Μιχάλης Μίχος', club: 'FDW', goals: 9 },
+  { rank: 4, name: 'Βαγγέλης Γακιας', club: 'CB', goals: 7 },
+  { rank: 5, name: 'Βασίλης Εστιαδης', club: 'EXT', goals: 6 }
 ]
 
 const thrillers = [
   { total: '7 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Drink Team', as: 4, bs: 3 },
   { total: '6 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Νικολάου FC', as: 5, bs: 1 },
   { total: '5 Γκολ', a: 'Δόξα', b: 'Xavalencia', as: 3, bs: 2 }
+
 ]
 </script>
 
@@ -69,7 +71,7 @@ const thrillers = [
 
       <section>
         <UPageFeature icon="lucide:bar-chart-3" title="Σε αριθμούς" description="Η ΧΡΟΝΙΑ ΣΕ ΝΟΥΜΕΡΑ"/>
-        <UPageGrid class="lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4">
+        <UPageGrid class="lg:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-4">
           <div
             v-for="s in stats"
             :key="s.label"
@@ -110,7 +112,7 @@ const thrillers = [
             <span class="w-6 text-lg font-black text-secondary-300">{{ s.rank }}</span>
             <div class="min-w-0 flex-1">
               <p class="truncate font-bold text-white">{{ s.name }}</p>
-              <p class="truncate text-xs text-white/50">{{ s.club }}</p>
+              <p class="truncate text-xs text-warning">{{ s.club }}</p>
             </div>
             <div class="shrink-0 text-right">
               <p class="text-2xl font-black text-secondary-300">{{ s.goals }}</p>

@@ -1,70 +1,27 @@
 <script setup lang="ts">
-/**
- * Full-screen rolling-ball overlay shown on every route change.
- * A football rolls across a maroon curtain while the next page loads.
- */
 const active = ref(false)
 const router = useRouter()
 
+const {start, stop} = useTimeout(700, {callback: () => {
+  active.value = false
+}, controls: true})
+
 router.beforeEach(() => {
+  stop();
   active.value = true
 })
+
 router.afterEach(() => {
-  // keep the curtain up long enough to see the ball roll through
-  setTimeout(() => {
-    active.value = false
-  }, 650)
+  start()
 })
 </script>
 
 <template>
-  <Transition name="curtain">
-    <div v-if="active" class="ball-overlay">
-      <div class="ball">
-        <UIcon name="maki:soccer-11" class="ball-icon" />
+  <Transition mode="out-in" enter-active-class="transition-opacity ease duration-250" enter-from-class="opacity-0" leave-to-class="opacity-0" leave-active-class="transition-opacity ease duration-25">
+    <div v-if="active" class="fixed top-1/4 inset-0 flex flec-col items-start justify-center ball-overlay">
+      <div class="animate-ball">
+        <UIcon name="noto:soccer-ball" class="size-8" />
       </div>
     </div>
   </Transition>
 </template>
-
-<style scoped>
-.ball-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at center, #641727 0%, #3d0e16 100%);
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.ball {
-  color: #ffffff;
-  animation: roll 0.9s linear;
-}
-
-.ball-icon {
-  width: 72px;
-  height: 72px;
-}
-
-@keyframes roll {
-  0% {
-    transform: translateX(-60vw) rotate(0deg);
-  }
-  100% {
-    transform: translateX(60vw) rotate(720deg);
-  }
-}
-
-.curtain-enter-active,
-.curtain-leave-active {
-  transition: opacity 0.25s ease;
-}
-.curtain-enter-from,
-.curtain-leave-to {
-  opacity: 0;
-}
-</style>

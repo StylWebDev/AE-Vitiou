@@ -20,7 +20,7 @@ export default defineNuxtConfig({
       { from: 'zod', imports: [['output', 'ZodOutput']], type: true },
       {
         from: '@vueuse/core',
-        imports: ['breakpointsTailwind', 'useBreakpoints']
+        imports: ['breakpointsTailwind', 'useBreakpoints', 'useTimeout']
       }
     ]
   },
@@ -44,7 +44,8 @@ export default defineNuxtConfig({
       },
       blob: {
         driver: 'cloudflare-r2',
-        bucketName: process.env.NUXT_HUB_CLOUDFLARE_BUCKET_ID
+        bucketName: process.env.NUXT_HUB_CLOUDFLARE_BUCKET_ID,
+        binding: 'BLOB'
       }
 
     },

@@ -47,7 +47,7 @@ const pages = [
   { label: 'Αγώνες', icon: 'streamline-ultimate:soccer-field-bold', to: '/matches' },
   { label: 'Η Ομάδα', icon: 'fluent:people-team-28-filled', to: '/team' },
   { label: 'Σκόρερ', icon: 'maki:soccer-11', to: '/scorers' },
-  { label: 'Blog', icon: 'gravity-ui:square-article', to: '/blog' }
+  { label: 'Νέα', icon: 'gravity-ui:square-article', to: '/blog' }
 ]
 
 const externalLinks: NavigationMenuItem[] = [

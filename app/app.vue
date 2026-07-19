@@ -29,5 +29,6 @@ useSeoMeta({
     <NuxtLayout>
         <NuxtPage/>
     </NuxtLayout>
+    <LayoutsBallTransition/>
   </UApp>
 </template>

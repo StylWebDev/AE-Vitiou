@@ -37,7 +37,7 @@ const rest = [
           />
           <img src="/logo.webp" :alt="p.club" class="mx-auto mb-3 h-14 w-14 object-contain" />
           <p class="text-sm font-bold uppercase tracking-wide text-white">{{ p.name }}</p>
-          <p class="mt-1 text-[11px] uppercase tracking-widest text-white/40">{{ p.club }}</p>
+          <p class="mt-1 text-[11px] uppercase tracking-widest text-warning">position</p>
           <p
             class="group-data-[rank=1]:text-info-300 group-data-[rank=2]:text-success-200 group-data-[rank=3]:text-secondary-200   mt-3 text-3xl font-black"
           >
@@ -54,8 +54,11 @@ const rest = [
           :class="i !== rest.length - 1 ? 'border-b border-primary-800/40' : ''"
         >
           <span class="w-6 text-sm font-bold text-white/40">{{ s.rank }}</span>
-          <span class="h-2.5 w-2.5 shrink-0 rounded-full" :class="s.dot" />
-          <span class="flex-1 truncate font-semibold uppercase tracking-wide text-white">{{ s.name }}</span>
+          <span class="h-2.5 w-2.5 shrink-0 rounded-full " :class="s.dot" />
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-bold text-white ">{{ s.name }}</p>
+            <p class="truncate text-xs text-warning">position</p>
+          </div>
           <span class="shrink-0 text-lg font-black text-secondary-300">{{ s.goals }}</span>
         </div>
       </div>

@@ -30,6 +30,22 @@
   --color-secondary-950: #271429;
 }
 
+@theme base {
+  --animate-ball: roll 1s linear;
+
+  @keyframes roll {
+    0% {
+      transform: translateX(-60vw) translateY(20vh) rotate(0deg);
+    }
+    50% {
+      transform: translateX(0vw) translateY(10vh)
+    }
+    100% {
+      transform: translateX(60vw) translateY(20vh) rotate(720deg);
+    }
+  }
+}
+
 body  {
   background-color: #1b0609 !important;
 }
