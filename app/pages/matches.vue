@@ -139,8 +139,7 @@ const days = computed(() => {
 </script>
 
 <template>
-  <div class="bg-primary-950 min-h-screen">
-    <div class="mx-auto max-w-4xl px-4 py-12">
+  <UPageSection>
       <h1 class="mb-8 text-3xl font-black italic text-white sm:text-4xl">ΑΓΩΝΕΣ</h1>
 
       <USelect
@@ -223,6 +222,5 @@ const days = computed(() => {
       </div>
 
       <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παιχνίδια με βάση την αναζήτηση σας" :ui="{title: 'text-primary-300'}" />
-    </div>
-  </div>
+  </UPageSection>
 </template>

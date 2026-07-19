@@ -9,7 +9,7 @@ const posts = [
 </script>
 
 <template>
-  <div class="mx-auto max-w-4xl px-4 py-12">
+  <UPageSection>
     <UPageFeature icon="streamline-sharp:paragraph-article-solid" title="ΤΑ ΝΕΑ ΜΑΣ" description="ΤΟ BLOG ΤΗΣ ΟΜΑΔΑΣ"/>
 
     <div class="grid gap-6 md:grid-cols-2">
@@ -23,5 +23,5 @@ const posts = [
         <UButton label="Διαβάστε περισσότερα" variant="link" color="warning" class="mt-2 px-0" trailing-icon="lucide:arrow-right" />
       </UCard>
     </div>
-  </div>
+  </UPageSection>
 </template>

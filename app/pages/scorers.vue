@@ -19,8 +19,7 @@ const rest = [
 </script>
 
 <template>
-  <div class="bg-primary-950 min-h-screen">
-    <div class="mx-auto max-w-6xl px-4 py-12">
+  <UPageSection class="bg-primary-950 min-h-screen">
       <h1 class="mb-10 font-black italic text-center text-white text-5xl">ΠΡΩΤΟΙ 10 ΣΚΟΡΕΡ</h1>
 
       <!-- Podium top 3 -->
@@ -62,6 +61,5 @@ const rest = [
           <span class="shrink-0 text-lg font-black text-secondary-300">{{ s.goals }}</span>
         </div>
       </div>
-    </div>
-  </div>
+  </UPageSection>
 </template>
