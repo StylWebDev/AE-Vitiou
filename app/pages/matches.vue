@@ -6,7 +6,7 @@ const phase = ref('all')
 const tab = ref<string>('all')
 const activeDay = ref<number>()
 
-const phases = [
+const competitions = [
   { label: 'Ολα', value: 'all' },
   { label: 'Πρωτάθλημα', value: 'championship' },
   { label: 'Κύπελο', value: 'cup' }
@@ -105,8 +105,6 @@ const matches = reactive([
   }
 ])
 
-
-
 const tabs = computed(() => [
   { key: 'live', label: 'LIVE', count: matches.filter(m => m.status === 'live').length },
   { key: 'pending', label: 'Επόμενα', count: matches.filter(m => m.status === 'pending').length  },
@@ -144,7 +142,7 @@ const days = computed(() => {
 
       <USelect
         v-model="phase"
-        :items="phases"
+        :items="competitions"
         size="lg"
         class="mb-4 w-full"
         :ui="{ base: 'bg-primary-900/40 ring-primary-800/50 text-white hover:bg-primary-700', content: 'bg-primary-800 ring-primary-500', item: 'text-primary-300', trailingIcon: 'text-primary-300' }"
@@ -199,7 +197,7 @@ const days = computed(() => {
           :ui="{ root: 'bg-primary-900/40 ring-primary-800/50', body: 'p-6' }"
         >
           <div class="mb-5 flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-widest text-primary-300">{{ phases.find(phase => phase.value === m.phase)?.label }}</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-primary-300">{{ competitions.find(phase => phase.value === m.phase)?.label }}</span>
             <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
           </div>
           <div class="flex items-center justify-between gap-4">

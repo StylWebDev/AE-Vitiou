@@ -39,7 +39,6 @@ const thrillers = [
   { total: '7 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Drink Team', as: 4, bs: 3 },
   { total: '6 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Νικολάου FC', as: 5, bs: 1 },
   { total: '5 Γκολ', a: 'Δόξα', b: 'Xavalencia', as: 3, bs: 2 }
-
 ]
 </script>
 
