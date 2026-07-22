@@ -4,6 +4,8 @@ useSeoMeta({
   description: 'Το ρόστερ, η ιστορία και τα στατιστικά της ΑΕ Βιτσιου.'
 })
 
+const {loggedIn} = useUserSession()
+
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const lgAndDown = breakpoints.smallerOrEqual('md')
@@ -156,7 +158,12 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
         <UIcon name="lucide:list" class="h-5 w-5" />
         <span class="text-xs font-bold uppercase tracking-widest">Ρόστερ</span>
       </div>
-      <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
+      <div class="flex justify-between items-center">
+        <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
+        <PlayersAdd>
+          <UButton variant="subtle" icon="material-symbols:add-2"/>
+        </PlayersAdd>
+      </div>
       <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
         <div
           v-for="(s, i) in players"

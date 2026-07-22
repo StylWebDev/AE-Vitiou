@@ -5,7 +5,6 @@ export const player = sqliteTable('players', {
   number: integer('number',{mode: 'number'}),
   name: text('name').notNull(),
   pos: text('pos',{enum: ['GK' , 'DEF' , 'MID' , 'FWD']}),
-  positionName: text('position_name'),
   isCaptain: integer({mode: 'boolean'}),
   createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),
 })

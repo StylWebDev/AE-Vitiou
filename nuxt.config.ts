@@ -28,7 +28,8 @@ export default defineNuxtConfig({
   $development: {
     hub: {
       db: {
-        dialect: 'sqlite'
+        dialect: 'sqlite',
+        // driver: 'd1-http'
       }
     }
   },
