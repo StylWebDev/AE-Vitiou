@@ -5,7 +5,7 @@
       <p class="text-lg text-white">Θες σίγουρα να διαγράψεις τον παίχτη; Η ενέργεια αυτή θα είναι μη αναστρέψιμη</p>
     </template>
     <template #footer>
-      <UButton color="success" size="xl" label="Διαγραφή" icon="material-symbols:delete-rounded" :loading="loading" :disabled="loading"  @click="deletePlayer"/>
+      <UButton color="error" size="xl" label="Διαγραφή" icon="material-symbols:delete-rounded" :loading="loading" :disabled="loading"  @click="deletePlayer"/>
     </template>
   </UModal>
 </template>

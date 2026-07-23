@@ -175,7 +175,10 @@ getPlayers()
               :label="s.pos"
               class="rounded-full min-w-12 justify-center"
             />
-            <span class="truncate font-semibold uppercase tracking-wide text-white">{{ s.name }}</span>
+            <span class="truncate font-semibold uppercase tracking-wide text-white">
+              {{ s.name }}
+              <span v-if="s.isCaptain" class="text-xs text-orange-500">(c)</span>
+            </span>
           </div>
 
           <div class="flex items-center gap-4 max-lg:justify-between max-lg:w-9/10">
@@ -187,9 +190,9 @@ getPlayers()
               <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
                 <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
               </PlayersEdit>
-              <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
-                <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
-              </PlayersEdit>
+              <PlayersDelete v-if="loggedIn" :player-id="s.id" @refresh="getPlayers()">
+                <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
+              </PlayersDelete>
             </div>
 
           </div>
