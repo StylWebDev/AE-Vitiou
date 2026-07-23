@@ -1,16 +1,14 @@
 import {db, schema} from '@nuxthub/db'
-import {eq} from 'drizzle-orm'
-export default defineEventHandler(async  (event) => {
-  const {id} =  getQuery<{id: number}>(event);
-  try {
-    await db.delete(schema.player).where(eq(schema.player.id, id));
 
-    return {status: 200, response: 'Successfully delete player'};
+export default defineEventHandler(async () => {
+  try {
+    const data = await db.select().from(schema.player);
+    return {status: 200, response: data};
   }
   catch {
     throw createError({
       status: 400,
-      statusText: 'Could not delete Player',
+      statusText: 'Could not Create Player',
     })
   }
 })
