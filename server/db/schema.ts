@@ -4,7 +4,7 @@ export const player = sqliteTable('players', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   number: integer('number',{mode: 'number'}).unique(),
   name: text('name').notNull().unique(),
-  pos: text('pos',{enum: ['GK' , 'DEF' , 'MID' , 'FWD']}),
+  pos: text('pos',{enum: ['GK' , 'DEF' , 'MID' , 'ΕΧΤ', 'FWD']}),
   isCaptain: integer({mode: 'boolean'}),
   createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),
 })

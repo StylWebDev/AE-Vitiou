@@ -20,7 +20,7 @@
        </UForm>
      </template>
     <template #footer>
-      <UButton color="success" size="xl" label="Δημιουργία"  @click="form?.submit()"/>
+      <UButton color="success" size="xl" label="Δημιουργία" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
     </template>
   </UModal>
 </template>
@@ -32,6 +32,7 @@ import type { SelectItem } from '@nuxt/ui'
 <script setup lang="ts">
 const form = useTemplateRef<HTMLFormElement>('form');
 const open = ref(false);
+const loading = ref(false);
 
 const positions = ref<SelectItem[]>([
   {
@@ -45,6 +46,10 @@ const positions = ref<SelectItem[]>([
   {
     label: 'Κέντρο',
     value: 'MID'
+  },
+  {
+    label: 'Εξτρέμ',
+    value: 'ΕΧΤ'
   },
   {
     label: 'Επιθετικός',
@@ -68,7 +73,16 @@ const state: ZodOutput<typeof schema> = reactive({
 
 const toast = useToast();
 
+function reset() {
+  state.name = '';
+  state.number = 1;
+  state.pos = 'GK';
+  state.isCaptain = false;
+}
+
 function createPlayer() {
+  loading.value = true;
+
   $fetch('/api/player', {
     method: HTTP_METHODS.POST,
     body: state,
@@ -91,6 +105,15 @@ function createPlayer() {
       color: 'error',
       type: 'foreground'
     })
+  }).finally(() => {
+    loading.value = false;
+    open.value = false;
   })
 }
+
+watch(open, (v) => {
+  if (!v) {
+    reset();
+  }
+})
 </script>
