@@ -1,5 +1,10 @@
 export type BoolInt = 0 | 1
 
+export interface ApiResponse<T> {
+  status: number
+  response: T
+}
+
 export interface HTTPMethods {
   GET: 'GET',
   POST: 'POST',
