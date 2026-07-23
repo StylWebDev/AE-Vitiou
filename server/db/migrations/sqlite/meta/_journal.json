@@ -36,6 +36,13 @@
       "when": 1784701490393,
       "tag": "0004_breezy_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1784755283932,
+      "tag": "0005_broken_oracle",
+      "breakpoints": true
     }
   ]
 }

@@ -2,8 +2,8 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 
 export const player = sqliteTable('players', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  number: integer('number',{mode: 'number'}),
-  name: text('name').notNull(),
+  number: integer('number',{mode: 'number'}).unique(),
+  name: text('name').notNull().unique(),
   pos: text('pos',{enum: ['GK' , 'DEF' , 'MID' , 'FWD']}),
   isCaptain: integer({mode: 'boolean'}),
   createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),

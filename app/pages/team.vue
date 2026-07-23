@@ -32,9 +32,10 @@ const players = ref([
   { number: 11, name: 'Βασίλης Εστιαδης', pos: 'FWD' as Pos, position: 'Αριστερό εξτρέμ', stat: 'Γκολ: 6', isCaptain: false },
   { number: 9, name: 'Απόστολος Ρεβησιος', pos: 'FWD' as Pos, position: 'Φορ', stat: 'Γκολ: 7', isCaptain: false }
 ])
+const newPlayers = ref<any[]>([])
 
 const fieldPlayers = computed(() => {
-  return players.value.map(p => {
+  return newPlayers.value.map(p => {
     return {
       number: p.number,
       name: p.name,
@@ -102,6 +103,18 @@ const goalsPerMatch = [
 const totalCups = trophies.reduce((s, t) => s + t.cups, 0)
 const totalTitles = trophies.reduce((s, t) => s + t.titles, 0)
 const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch.length).toFixed(1)
+
+function getPlayers() {
+  $fetch('/api/get/players')
+    .then((res) => {
+      newPlayers.value = res.response;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+}
+
+getPlayers()
 </script>
 
 <template>
@@ -166,7 +179,7 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
       </div>
       <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
         <div
-          v-for="(s, i) in players"
+          v-for="(s, i) in newPlayers"
           :key="s.number"
           class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
           :class="i !== players.length - 1 ? 'border-b border-primary-800/40' : ''"

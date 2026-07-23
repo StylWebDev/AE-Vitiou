@@ -2,7 +2,7 @@
   <UModal v-model:open="open" title="Προσθήκη παίχτη">
     <slot/>
      <template #body>
-       <UForm ref="form" :schema="schema" :state="state" class="p-4 ring ring-primary-700 bg-primary-900 rounded-2xl space-y-4" @submit.prevent="createPlayer" >
+       <UForm ref="form" :schema="schema" :state="state" class="p-4  rounded-2xl space-y-4" @submit.prevent="createPlayer" >
          <UFormField size="lg" name="name" label="Όνομα παίχτη" required :ui="{label: 'text-primary-100'}" >
            <UInput v-model="state.name" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
          </UFormField>
@@ -10,11 +10,11 @@
            <UInputNumber v-model="state.number" :min="1" :max="99" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
          </UFormField>
 
-         <UFormField size="lg" name="email" label="pos" required :ui="{label: 'text-primary-100'}" >
+         <UFormField size="lg" name="pos" label="Θέση" required :ui="{label: 'text-primary-100'}" >
            <USelect v-model="state.pos" class="w-full" :items="positions" :ui="{base: 'bg-primary-950 text-white'}"/>
          </UFormField>
 
-         <UFormField size="lg" name="email" label="isCaptain" required :ui="{label: 'text-primary-100'}">
+         <UFormField size="lg" name="isCaptain" label="Αρχηγός Ομάδας" required :ui="{label: 'text-primary-100'}">
            <USwitch v-model="state.isCaptain" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
          </UFormField>
        </UForm>
@@ -82,10 +82,10 @@ function createPlayer() {
       color: 'success',
       type: 'foreground'
     })
-  }).catch(() => {
+  }).catch((err) => {
     toast.add({
       title: 'Κάτι πήγε στραβά',
-      description: 'Αδυναμία δημιουργίας παίχτη',
+      description: err.statusText,
       icon: 'material-symbols:person-cancel',
       duration: 5000,
       color: 'error',
