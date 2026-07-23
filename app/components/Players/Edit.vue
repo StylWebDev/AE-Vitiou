@@ -1,8 +1,8 @@
 <template>
-  <UModal v-model:open="open" title="Προσθήκη παίχτη">
+  <UModal v-model:open="open" title="Eπεξεργασία παίχτη">
     <slot/>
     <template #body>
-      <UForm ref="form" :schema="schema" :state="state" class="p-4  rounded-2xl space-y-4" @submit.prevent="createPlayer" >
+      <UForm ref="form" :schema="schema" :state="state" class="p-4  rounded-2xl space-y-4" @submit.prevent="editPlayer" >
         <UFormField size="lg" name="name" label="Όνομα παίχτη" required :ui="{label: 'text-primary-100'}" >
           <UInput v-model="state.name" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
         </UFormField>
@@ -20,7 +20,7 @@
       </UForm>
     </template>
     <template #footer>
-      <UButton color="success" size="xl" label="Δημιουργία" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
+      <UButton color="success" size="xl" label="Αποθήκευση" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
     </template>
   </UModal>
 </template>
@@ -28,12 +28,16 @@
 <script lang="ts">
 import type { SelectItem } from '@nuxt/ui'
 interface Props {
-  player: any
+  player: Player
+}
+interface Emits {
+  refresh: [];
 }
 </script>
 
 <script setup lang="ts">
-const {palyer} = defineProps<Props>()
+const {player} = defineProps<Props>()
+const emit = defineEmits<Emits>()
 
 const form = useTemplateRef<HTMLFormElement>('form');
 const open = ref(false);
@@ -65,27 +69,27 @@ const positions = ref<SelectItem[]>([
 const schema = zod.object({
   name: zod.string().nonempty(),
   number: zod.number().min(1).max(99),
-  pos: zod.enum(['GK' , 'DEF' , 'MID' , 'FWD']),
+  pos: zod.enum(['GK' , 'DEF' , 'MID' , 'EXT' , 'FWD']),
   isCaptain: zod.boolean()
 })
 
 const state: ZodOutput<typeof schema> = reactive({
-  name: '',
-  number: 1,
-  pos: 'GK',
-  isCaptain: false,
+  name: player.name,
+  number: player.number,
+  pos: player.pos,
+  isCaptain: Boolean(player.isCaptain),
 })
 
 const toast = useToast();
 
-function createPlayer() {
+function editPlayer() {
   loading.value = true;
 
-  $fetch('/api/player', {
+  $fetch('/api/update/player', {
     method: HTTP_METHODS.POST,
+    query: {id: player.id},
     body: state,
-  }).then((data) => {
-    console.log(data);
+  }).then(() => {
     toast.add({
       title: 'Επιτυχία',
       description: 'Η Επεξεργασία του παίχτη ήταν επιτυχής',
@@ -94,6 +98,7 @@ function createPlayer() {
       color: 'success',
       type: 'foreground'
     })
+    emit('refresh')
   }).catch((err) => {
     toast.add({
       title: 'Κάτι πήγε στραβά',

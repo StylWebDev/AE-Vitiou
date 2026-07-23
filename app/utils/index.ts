@@ -6,3 +6,11 @@ export const HTTP_METHODS = {
   PATCH: 'PATCH',
   DELETE: 'DELETE',
 } as HTTPMethods
+
+export const positions = {
+  GK: 'Τερματοφύλακας',
+  DEF: "Αμυντικός",
+  MID: 'Κέντρο',
+  EXT: "Εξτρέμ",
+  FWD: "Επιθετικός"
+} as const

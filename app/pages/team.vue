@@ -6,33 +6,18 @@ useSeoMeta({
 
 const {loggedIn} = useUserSession()
 
-
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const lgAndDown = breakpoints.smallerOrEqual('md')
 
-type Pos = 'GK' | 'DEF' | 'MID' | 'FWD'
-const posColor: Record<Pos, 'primary' | 'secondary' | 'success' | 'warning'> = {
+const posColor = {
   GK: 'warning',
-  DEF: 'primary',
-  MID: 'secondary',
-  FWD: 'success'
+  DEF: 'info',
+  EXT: 'secondary',
+  MID: 'success',
+  FWD: 'primary'
 }
 
-
-const players = ref([
-  { number: 1, name: 'Γιώργος Παπαδόπουλος', pos: 'GK' as Pos, position: 'Τερματοφύλακας', stat: 'GA: 12', isCaptain: false },
-  { number: 2, name: 'Νίκος Ιωάννου', pos: 'DEF' as Pos, position: 'Δεξί μπακ', stat: 'App: 22', isCaptain: false },
-  { number: 4, name: 'Δημήτρης Καρράς', pos: 'DEF' as Pos, position: 'Στόπερ', stat: 'App: 24', isCaptain: false },
-  { number: 5, name: 'Θανάσης Μήτσου', pos: 'DEF' as Pos, position: 'Στόπερ', stat: 'App: 20', isCaptain: false },
-  { number: 3, name: 'Κώστας Ζήκος', pos: 'DEF' as Pos, position: 'Αριστερό μπακ', stat: 'App: 19', isCaptain: false },
-  { number: 6, name: 'Βαγγέλης Γακιας', pos: 'MID' as Pos, position: 'Αμυντικό χαφ', stat: 'Ast: 6',isCaptain: true },
-  { number: 8, name: 'Θωμάς Σταμούλης', pos: 'MID' as Pos, position: 'Κεντρικό χαφ', stat: 'Γκολ: 12', isCaptain: false },
-  { number: 10, name: 'Σπύρος Καραβασιλης', pos: 'MID' as Pos, position: 'Επιθετικό χαφ', stat: 'Γκολ: 18', isCaptain: false },
-  { number: 7, name: 'Μιχάλης Μίχος', pos: 'FWD' as Pos, position: 'Δεξί εξτρέμ', stat: 'Γκολ: 9', isCaptain: false },
-  { number: 11, name: 'Βασίλης Εστιαδης', pos: 'FWD' as Pos, position: 'Αριστερό εξτρέμ', stat: 'Γκολ: 6', isCaptain: false },
-  { number: 9, name: 'Απόστολος Ρεβησιος', pos: 'FWD' as Pos, position: 'Φορ', stat: 'Γκολ: 7', isCaptain: false }
-])
-const newPlayers = ref<any[]>([])
+const newPlayers = ref<Player[]>([])
 
 const fieldPlayers = computed(() => {
   return newPlayers.value.map(p => {
@@ -44,8 +29,6 @@ const fieldPlayers = computed(() => {
   })
 })
 
-
-// ————— Club history timeline —————
 const timeline = [
   {
     year: 'XXXX',
@@ -105,7 +88,7 @@ const totalTitles = trophies.reduce((s, t) => s + t.titles, 0)
 const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch.length).toFixed(1)
 
 function getPlayers() {
-  $fetch('/api/get/players')
+  $fetch<ApiResponse<Player[]>>('/api/get/players')
     .then((res) => {
       newPlayers.value = res.response;
     })
@@ -173,7 +156,7 @@ getPlayers()
       </div>
       <div class="flex justify-between items-center">
         <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
-        <PlayersAdd>
+        <PlayersAdd v-if="loggedIn">
           <UButton variant="subtle" icon="material-symbols:add-2"/>
         </PlayersAdd>
       </div>
@@ -182,7 +165,7 @@ getPlayers()
           v-for="(s, i) in newPlayers"
           :key="s.number"
           class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
-          :class="i !== players.length - 1 ? 'border-b border-primary-800/40' : ''"
+          :class="i !== newPlayers.length - 1 ? 'border-b border-primary-800/40' : ''"
         >
           <div class="flex items-center gap-4 max-md:justify-center max-lg:w-full">
             <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
@@ -197,9 +180,18 @@ getPlayers()
 
           <div class="flex items-center gap-4 max-lg:justify-between max-lg:w-9/10">
               <span class="shrink-0 text-sm font-black text-secondary-300 uppercase tracking-wide">
-                {{ s.position }}
+                {{ positions[s.pos] }}
               </span>
-            <UBadge size="md" variant="subtle" color="success" :label="s.stat" class="rounded-full" />
+            <div class="flex">
+              <UBadge size="md" variant="subtle" color="success" label="-" class="rounded-full" />
+              <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
+                <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+              </PlayersEdit>
+              <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
+                <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+              </PlayersEdit>
+            </div>
+
           </div>
         </div>
       </div>
