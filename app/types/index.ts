@@ -21,3 +21,17 @@ export interface Player {
   isCaptain: BoolInt;
   createdAt: string;
 }
+
+export interface Match {
+  id: number;
+  status: 'final' | 'pending' | 'live';
+  competition: 'championship' | 'cup';
+  home: string;
+  away: string;
+  hs: number;
+  points: number;
+  as: number;
+  date: Date | null;
+  isTrophy: boolean;
+  createdAt: Date;
+}
