@@ -24,7 +24,7 @@ const fieldPlayers = computed(() => {
     return {
       number: p.number,
       name: p.name,
-      isCaptain: p.isCaptain,
+      isCaptain: Boolean(p.isCaptain),
     }
   })
 })
@@ -83,7 +83,6 @@ const goalsPerMatch = [
   { match: 'Α10', goals: 3 }
 ]
 
-const totalCups = trophies.reduce((s, t) => s + t.cups, 0)
 const totalTitles = trophies.reduce((s, t) => s + t.titles, 0)
 const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch.length).toFixed(1)
 
@@ -117,12 +116,12 @@ getPlayers()
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:trophy" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
           <p class="text-4xl font-black text-white">{{ totalTitles }}</p>
-          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Πρωταθλήματα</p>
+          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Τίτλοι</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
-          <UIcon name="mdi:trophy-award" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ totalCups }}</p>
-          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Κύπελλα</p>
+          <UIcon name="tabler:soccer-field" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+          <p class="text-4xl font-black text-white"> 5 </p>
+          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Παιχνίδια</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:flame" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
