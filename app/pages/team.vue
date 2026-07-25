@@ -1,90 +1,3 @@
-<script setup lang="ts">
-useSeoMeta({
-  title: 'ΑΕ Βιτσιου — Η Ομάδα',
-  description: 'Το ρόστερ, η ιστορία και τα στατιστικά της ΑΕ Βιτσιου.'
-})
-
-const {loggedIn} = useUserSession()
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const lgAndDown = breakpoints.smallerOrEqual('md')
-
-const posColor = {
-  GK: 'warning',
-  DEF: 'info',
-  EXT: 'secondary',
-  MID: 'success',
-  FWD: 'primary'
-}
-
-const newPlayers = ref<Player[]>([])
-
-const fieldPlayers = computed(() => {
-  return newPlayers.value.map(p => {
-    return {
-      number: p.number,
-      name: p.name,
-      isCaptain: Boolean(p.isCaptain),
-    }
-  })
-})
-
-const timeline = [
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1978.jpg'
-  },
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1985.jpg'
-  },
-  {
-    year: '1999',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1999.jpg'
-  },
-  {
-    year: 'XXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-2012.jpg'
-  },
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.',
-    image: '/team-2026.jpg'
-  }
-]
-const stats = ref<Stats>()
-
-function getPlayers() {
-  $fetch<ApiResponse<Player[]>>('/api/get/players')
-    .then((res) => {
-      newPlayers.value = res.response;
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-}
-
-getPlayers()
-
-function getStats() {
-  $fetch<ApiResponse<Stats>>('/api/get/stats')
-    .then((resp) => {
-      stats.value = resp.response
-    })
-}
-
-getStats();
-</script>
-
 <template>
   <UPageSection >
       <!-- Header -->
@@ -101,17 +14,17 @@ getStats();
       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:trophy" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ stats?.titles ?? 0 }}</p>
+          <p class="text-4xl font-black text-white">{{ stats?.titles ?? '-' }}</p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Τίτλοι</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="tabler:soccer-field" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white"> {{stats?.totalMatches ?? 0}} </p>
+          <p class="text-4xl font-black text-white"> {{stats?.totalMatches ?? '-'}} </p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Παιχνίδια</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
-          <UIcon name="lucide:flame" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{(stats?.avgGoals ?? 0).toFixed(1)}}</p>
+          <UIcon name="hugeicons:chart-average" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+          <p class="text-4xl font-black text-white">{{ stats?.avgGoals.toFixed(1) ?? '-'}}</p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Μ.Ο. Γκολ / Αγώνα</p>
         </div>
       </div>
@@ -157,7 +70,7 @@ getStats();
             <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
             <UBadge
               size="lg"
-              :color="posColor[s.pos]"
+              :color="PosColor[s.pos]"
               :label="s.pos"
               class="rounded-full min-w-12 justify-center"
             />
@@ -239,7 +152,84 @@ getStats();
         </div>
       </div>
     </section>
-
-
   </UPageSection>
 </template>
+
+<script setup lang="ts">
+useSeoMeta({
+  title: 'ΑΕ Βιτσιου — Η Ομάδα',
+  description: 'Το ρόστερ, η ιστορία και τα στατιστικά της ΑΕ Βιτσιου.'
+})
+
+const {loggedIn} = useUserSession()
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const lgAndDown = breakpoints.smallerOrEqual('md')
+
+const newPlayers = ref<Player[]>([])
+
+const fieldPlayers = computed(() => {
+  return newPlayers.value.map(p => {
+    return {
+      number: p.number,
+      name: p.name,
+      isCaptain: Boolean(p.isCaptain),
+    }
+  })
+})
+
+const timeline = [
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1978.jpg'
+  },
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1985.jpg'
+  },
+  {
+    year: '1999',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1999.jpg'
+  },
+  {
+    year: 'XXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-2012.jpg'
+  },
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.',
+    image: '/team-2026.jpg'
+  }
+]
+const stats = ref<Stats>()
+
+function getPlayers() {
+  $fetch<ApiResponse<Player[]>>('/api/get/players')
+    .then((res) => {
+      newPlayers.value = res.response;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+}
+
+getPlayers()
+
+function getStats() {
+  $fetch<ApiResponse<Stats>>('/api/get/stats')
+    .then((resp) => {
+      stats.value = resp.response
+    })
+}
+
+getStats();
+</script>

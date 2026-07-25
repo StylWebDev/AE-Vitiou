@@ -35,7 +35,7 @@ export default defineEventHandler(async () => {
       )
       .groupBy(schema.matches.id)
       .orderBy(desc(sql`sum(${schema.goals.ga})`))
-      .limit(10);
+      .limit(3);
 
 
 
@@ -50,7 +50,7 @@ export default defineEventHandler(async () => {
       )
       .groupBy(schema.player.id)
       .orderBy(desc(sql`sum(${schema.goals.ga})`))
-      .limit(10);
+      .limit(5);
 
     return {
       status: 200,
