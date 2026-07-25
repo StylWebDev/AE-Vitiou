@@ -61,30 +61,7 @@ const timeline = [
     image: '/team-2026.jpg'
   }
 ]
-
-const trophies = [
-  { label: '1980s', cups: 0, titles: 0 },
-  { label: '1990s', cups: 1, titles: 0 },
-  { label: '2000s', cups: 1, titles: 0 },
-  { label: '2010s', cups: 2, titles: 1 },
-  { label: '2020s', cups: 3, titles: 2 }
-]
-
-const goalsPerMatch = [
-  { match: 'Α1', goals: 2 },
-  { match: 'Α2', goals: 3 },
-  { match: 'Α3', goals: 1 },
-  { match: 'Α4', goals: 4 },
-  { match: 'Α5', goals: 5 },
-  { match: 'Α6', goals: 2 },
-  { match: 'Α7', goals: 3 },
-  { match: 'Α8', goals: 4 },
-  { match: 'Α9', goals: 3 },
-  { match: 'Α10', goals: 3 }
-]
-
-const totalTitles = trophies.reduce((s, t) => s + t.titles, 0)
-const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch.length).toFixed(1)
+const stats = ref<Stats>()
 
 function getPlayers() {
   $fetch<ApiResponse<Player[]>>('/api/get/players')
@@ -97,6 +74,15 @@ function getPlayers() {
 }
 
 getPlayers()
+
+function getStats() {
+  $fetch<ApiResponse<Stats>>('/api/get/stats')
+    .then((resp) => {
+      stats.value = resp.response
+    })
+}
+
+getStats();
 </script>
 
 <template>
@@ -115,17 +101,17 @@ getPlayers()
       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:trophy" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ totalTitles }}</p>
+          <p class="text-4xl font-black text-white">{{ stats?.titles ?? 0 }}</p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Τίτλοι</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="tabler:soccer-field" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white"> 5 </p>
+          <p class="text-4xl font-black text-white"> {{stats?.totalMatches ?? 0}} </p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Παιχνίδια</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:flame" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ avgGoals }}</p>
+          <p class="text-4xl font-black text-white">{{(stats?.avgGoals ?? 0).toFixed(1)}}</p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Μ.Ο. Γκολ / Αγώνα</p>
         </div>
       </div>
@@ -159,7 +145,8 @@ getPlayers()
           <UButton variant="subtle" icon="material-symbols:add-2"/>
         </PlayersAdd>
       </div>
-      <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
+
+      <div v-if="newPlayers.length > 0" class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
         <div
           v-for="(s, i) in newPlayers"
           :key="s.number"
@@ -197,6 +184,7 @@ getPlayers()
           </div>
         </div>
       </div>
+      <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες με βάση την αναζήτηση σας" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
     </section>
 
 

@@ -31,7 +31,19 @@ export interface Match {
   hs: number;
   points: number;
   as: number;
-  date: Date | null;
+  date: number;
   isTrophy: boolean;
   createdAt: Date;
+}
+
+export interface Stats {
+  "totalGoals": number;
+  "avgGoals": number;
+  "wins": number;
+  "totalMatches": number;
+  "points": number;
+  "titles": number;
+  "topScoredMatches": Match[];
+  "lastMatches": Match[];
+  "topScorers": Player[] ;
 }

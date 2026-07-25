@@ -6,7 +6,7 @@ export const player = sqliteTable('players', {
   name: text('name').notNull().unique(),
   pos: text('pos',{enum: ['GK' , 'DEF' , 'MID' , 'ΕΧΤ', 'FWD']}),
   isCaptain: integer({mode: 'boolean'}),
-  createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at',{ mode: 'timestamp' }).notNull().default(new Date()),
 })
 
 export const matches = sqliteTable('matches', {
