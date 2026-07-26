@@ -46,7 +46,7 @@
         <LayoutsSoccerField
           :orientation="lgAndDown ? 'portrait' : 'landscape'"
           :receivers="fieldPlayers"
-          :receiver-system="formation.formation"
+<!--          :receiver-system="formation.formation"-->
           class="w-full h-125"
         />
       </div>
