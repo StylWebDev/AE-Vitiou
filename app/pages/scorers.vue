@@ -68,7 +68,7 @@ function dotKey(rank: number) {
 }
 
 function getScorers() {
-  $fetch<ApiResponse<Scorer[]>>('api/scorers')
+  $fetch<ApiResponse<Scorer[]>>('api/get/scorers')
     .then((resp) => {
       scorers.value = resp.response
     })

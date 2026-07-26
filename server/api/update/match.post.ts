@@ -5,7 +5,7 @@ export default defineEventHandler(async  (event) => {
 
   const {id} =  getQuery<{id: number}>(event);
   try {
-    const [row] = await db.update(schema.matches).set({...data, date: new Date(data.date)}).where(eq(schema.player.id, id)).returning();
+    const [row] = await db.update(schema.matches).set({...data, date: new Date(data.date)}).where(eq(schema.matches.id, id)).returning();
 
     return {status: 200, response: row};
   }

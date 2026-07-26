@@ -176,8 +176,6 @@ function reset() {
 function createMatch() {
   loading.value = true;
 
-  console.debug(state)
-
   $fetch<ApiResponse<Match>>('/api/create/match', {
     method: HTTP_METHODS.POST,
     body: {
@@ -205,7 +203,6 @@ function createMatch() {
       }, {} as Record<string, Goal>),
     )
 
-    console.log(goalsData)
      await $fetch('/api/create/goals', {
       method: HTTP_METHODS.POST,
       body: goalsData

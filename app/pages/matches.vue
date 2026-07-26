@@ -69,6 +69,9 @@
             <span class="text-xs font-bold uppercase tracking-widest text-primary-300">{{ competitions.find(comp => comp.value === m.competition)?.label }}</span>
            <div class="flex gap-2">
              <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
+             <MatchEdit v-if="loggedIn" :match="m" @refresh="getMatches()" >
+               <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+             </MatchEdit>
              <MatchDelete v-if="loggedIn" :match-id="m.id" @refresh="getMatches()" >
                <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
              </MatchDelete>

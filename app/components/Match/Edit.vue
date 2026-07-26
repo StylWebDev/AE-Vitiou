@@ -13,12 +13,13 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UFormField size="lg" name="home" label="Γηπεδούχος" required :ui="{label: 'text-primary-100'}" >
-            <USelect v-model="state.home" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
+            <USelect v-model="state.home" class="w-full" :items="teamsItems" :ui="{base: 'bg-primary-950 text-white'}"/>
           </UFormField>
           <UFormField size="lg" name="away" label="Φιλοξενούμενος" required :ui="{label: 'text-primary-100'}" >
-            <USelect v-model="state.away" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
+            <USelect v-model="state.away" class="w-full" :items="teamsItems" :ui="{base: 'bg-primary-950 text-white'}"/>
           </UFormField>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <UFormField size="lg" name="hs" label="Γκολ Γηπεδούχου" required :ui="{label: 'text-primary-100'}" >
             <UInputNumber v-model="state.hs" :min="0" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
@@ -71,6 +72,12 @@
 
 <script lang="ts">
 import type { SelectItem } from '@nuxt/ui'
+import teams from '~/assets/teams.json'
+
+interface GoalScorer {
+  playerId: number | null
+}
+
 interface Props {
   match: Match
 }
@@ -113,20 +120,16 @@ const statuses = ref<SelectItem[]>([
   }
 ])
 
-// Roster used to populate the goal-scorer selects.
-// Assumes a GET /api/player endpoint, same as used elsewhere in the app.
 const playerItems = ref<SelectItem[]>([])
 
-onMounted(async () => {
-  try {
-    const players = await $fetch<Player[]>('/api/player')
-    playerItems.value = players.map((p) => ({
-      label: `${p.number} - ${p.name}`,
-      value: p.id,
-    }))
-  } catch (err) {
-    console.error(err)
-  }
+const teamsItems = computed<SelectItem[]>(() => {
+  return teams.map((team) => ({
+    ...team,
+    icon: undefined,
+    avatar: {
+      src: team.icon
+    }
+  }))
 })
 
 function toDateTimeLocal(date: Date | number | null | undefined) {
@@ -160,48 +163,45 @@ const state: ZodOutput<typeof schema> = reactive({
   isTrophy: Boolean(match.isTrophy),
 })
 
-interface GoalScorer {
-  playerId: number | null
-}
-
-const goalScorers = reactive<GoalScorer[]>(
-  matchGoals.map((g) => ({ playerId: g.playerId }))
-)
-
-watch(() => (state.hs ?? 0) + (state.as ?? 0), (total) => {
-  if (total > goalScorers.length) {
-    for (let i = goalScorers.length; i < total; i++) {
-      goalScorers.push({ playerId: null })
-    }
-  } else if (total < goalScorers.length) {
-    goalScorers.splice(total)
-  }
-}, { immediate: true })
+const goalScorers = ref<GoalScorer[]>([]);
 
 const toast = useToast();
 
 function editMatch() {
   loading.value = true;
 
-  $fetch('/api/update/match', {
+  $fetch<ApiResponse<Match>>('/api/update/match', {
     method: HTTP_METHODS.POST,
     query: {id: match.id},
     body: {
-      ...state,
-      date: state.date ? new Date(state.date) : null,
+      ...state
     },
-  }).then(() => {
-    const scorers = goalScorers.filter((s) => s.playerId !== null)
+  })
+    .then(async (resp) => {
+    const match: Match = resp.response;
+    const scorers = goalScorers.value.filter((s) => s.playerId !== null)
 
-    // Replaces all scorer rows for this match with the current selection.
-    return $fetch('/api/update/goal', {
+    if (!scorers.length) return;
+
+    const goalsData = Object.values(
+      scorers.reduce((acc, scorer) => {
+        const key = `scorer-${scorer.playerId}-${match.id}`;
+        if (exists(acc[key])) {
+          acc[key].ga +=1
+        }else {
+          acc[key] = {
+            playerId: scorer.playerId!,
+            matchId: match.id,
+            ga: 1
+          }
+        }
+        return acc
+      }, {} as Record<string, Goal>),
+    )
+
+    await $fetch('/api/create/goals', {
       method: HTTP_METHODS.POST,
-      query: {matchId: match.id},
-      body: scorers.map((s) => ({
-        matchId: match.id,
-        playerId: s.playerId,
-        ga: 1,
-      })),
+      body: goalsData
     })
   }).then(() => {
     toast.add({
@@ -228,4 +228,59 @@ function editMatch() {
   })
 }
 
+function getPlayers() {
+  $fetch<ApiResponse<Player[]>>('/api/get/players')
+    .then((resp) => {
+      playerItems.value = resp.response.map((player) => ({
+        label: player.name,
+        value: player.id,
+      }))
+    });
+}
+
+function getScorers() {
+  $fetch<ApiResponse<{player: Player, ga: number}[]>>('/api/get/scorers', {query: {matchId: match.id}})
+    .then((resp)=> {
+      console.log(resp.response);
+      for (const scorer of resp.response) {
+        for (let i=0; i<scorer.ga; i++) {
+          goalScorers.value.push({playerId: scorer.player.id})
+        }
+      }
+    })
+}
+
+getPlayers();
+getScorers();
+
+watch(state, (v) => {
+  if (v.home === 'ae_vitsiou') {
+    if (v.hs > goalScorers.value.length) {
+      for (let i = goalScorers.value.length; i < v.hs; i++) {
+        goalScorers.value.push({ playerId: null })
+      }
+    } else if (v.hs < goalScorers.value.length) {
+      goalScorers.value.splice(v.hs)
+    }
+  } else if (v.away === 'ae_vitsiou') {
+    if (v.as > goalScorers.value.length) {
+      for (let i = goalScorers.value.length; i < v.as; i++) {
+        goalScorers.value.push({ playerId: null })
+      }
+    } else if (v.as < goalScorers.value.length) {
+      goalScorers.value.splice(v.as)
+    }
+  }
+}, {deep: true })
+
+watch(
+  () => [state.home, state.away],
+  ([home, away], [oldHome, oldAway]) => {
+    if (oldHome !== home && home === away) {
+      state.away = '';
+    } else if (oldAway !== away && home === away) {
+      state.home = '';
+    }
+  }
+);
 </script>
