@@ -42,11 +42,11 @@
           <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
         </FormationSet>
       </div>
+<!--      :receiver-system="formation.formation"-->
       <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30 p-2 sm:p-4">
         <LayoutsSoccerField
           :orientation="lgAndDown ? 'portrait' : 'landscape'"
           :receivers="fieldPlayers"
-<!--          :receiver-system="formation.formation"-->
           class="w-full h-125"
         />
       </div>
