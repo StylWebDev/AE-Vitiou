@@ -13,6 +13,16 @@ export interface HTTPMethods {
   PATCH: 'PATCH'
 }
 
+export const Formation = {
+  S433: 'S433',
+  S343: 'S343',
+  S442: 'S442',
+  S352: 'S352',
+  S451: 'S451',
+  S3421: 'S3421',
+  S4231: 'S4231'
+} as const
+
 export interface Player {
   id: number;
   name: string;
@@ -53,3 +63,10 @@ export interface Stats {
   "lastMatches": Match[];
   "topScorers": Player[] ;
 }
+
+export interface FormationResponse {
+  formation?: FormationType;
+  players?: string;
+}
+
+export type FormationType = 'S433' | 'S343' | 'S442' | 'S352' | 'S451' | 'S3421' | 'S4231'

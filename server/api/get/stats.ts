@@ -59,9 +59,9 @@ export default defineEventHandler(async () => {
         wins,
         ...points[0],
         titles,
-        topScoredMatches: topScoredMatches.map(match => ({...match})) ,
+        topScoredMatches: topScoredMatches.map(match => ({...match.match})) ,
         lastMatches,
-        topScorers: topScorers.map(scorer => ({...scorer })) ,
+        topScorers: topScorers.map(scorer => ({...scorer.player })) ,
       }
     };
   }

@@ -81,9 +81,9 @@
             class="flex items-center justify-between gap-4 p-5 "
           >
             <div :data-team="match.home === 'ae_vitsiou'" class="group flex min-w-0 items-center gap-4">
-              <span class="shrink-0 text-xs font-bold uppercase tracking-widest group-data-[team=false]:text-secondary-300 group-data-[team=true]:text-sucvess">{{ match.home }}</span>
+              <span class="shrink-0 text-xs font-bold uppercase tracking-widest group-data-[team=false]:text-secondary-300 group-data-[team=true]:text-success"><UAvatar size="xs" :src="teams.find(t => t.value === match.home)?.icon" />  {{ teams.find(t => t.value === match.home)?.label  }}</span>
               <span class="truncate text-white/80">vs</span>
-              <span class="truncate text-white/80 group-data-[team=true]:text-secondary-300 group-data-[team=false]:text-success">{{match.away}}</span>
+              <span class="truncate text-xs font-bold  text-white/80 group-data-[team=true]:text-secondary-300 group-data-[team=false]:text-success"><UAvatar size="xs" :src="teams.find(t => t.value === match.away)?.icon" />  {{teams.find(t => t.value === match.away)?.label}}</span>
             </div>
             <span class="shrink-0 font-mono text-lg font-black text-white">{{match.hs}}-{{match.as}}</span>
           </div>
@@ -135,11 +135,11 @@
           >
             <p class="mb-4 text-xs font-bold uppercase tracking-widest text-secondary-300">{{ match.hs }}</p>
             <div class="flex items-center justify-between">
-              <span class="truncate font-semibold text-white">{{ match.home }}</span>
+              <span class="truncate font-semibold text-white"><UAvatar size="xs" :src="teams.find(t => t.value === match.home)?.icon" /> {{ teams.find(t => t.value === match.home)?.label}}</span>
               <span class="font-mono font-black text-white">{{ match.hs }}</span>
             </div>
             <div class="mt-2 flex items-center justify-between">
-              <span class="truncate font-semibold text-white/70">{{ match.away }}</span>
+              <span class="truncate font-semibold text-white/70"><UAvatar size="xs" :src="teams.find(t => t.value === match.away)?.icon"/> {{ teams.find(t => t.value === match.away)?.label }}</span>
               <span class="font-mono font-black text-white/70">{{ match.as }}</span>
             </div>
           </div>
@@ -150,6 +150,8 @@
 </template>
 
 <script setup lang="ts">
+import teams from '~/assets/teams.json'
+
 useSeoMeta({
   title: 'ΑΕ Βιτσιου — Αρχική',
   description: 'Καλωσήρθατε στην επίσημη ιστοσελίδα της ΑΕ Βιτσιου.'

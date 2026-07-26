@@ -36,11 +36,17 @@
         <UIcon name="streamline-ultimate:soccer-field-bold" class="h-5 w-5" />
         <span class="text-xs font-bold uppercase tracking-widest">Βασική ενδεκάδα</span>
       </div>
-      <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
+      <div class="flex justify-between items-center">
+        <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
+        <FormationSet v-if="loggedIn" :players="players" :football-schema="formation" @refresh="getFormation()">
+          <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+        </FormationSet>
+      </div>
       <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30 p-2 sm:p-4">
         <LayoutsSoccerField
           :orientation="lgAndDown ? 'portrait' : 'landscape'"
           :receivers="fieldPlayers"
+          :receiver-system="formation.formation"
           class="w-full h-125"
         />
       </div>
@@ -59,12 +65,12 @@
         </PlayersAdd>
       </div>
 
-      <div v-if="newPlayers.length > 0" class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
+      <div v-if="players.length > 0" class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
         <div
-          v-for="(s, i) in newPlayers"
+          v-for="(s, i) in players"
           :key="s.number"
           class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
-          :class="i !== newPlayers.length - 1 ? 'border-b border-primary-800/40' : ''"
+          :class="i !== players.length - 1 ? 'border-b border-primary-800/40' : ''"
         >
           <div class="flex items-center gap-4 max-md:justify-center max-lg:w-full">
             <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
@@ -165,17 +171,15 @@ const {loggedIn} = useUserSession()
 
 const breakpoints = useBreakpoints(breakpointsTailwind);
 const lgAndDown = breakpoints.smallerOrEqual('md')
-
-const newPlayers = ref<Player[]>([])
+const stats = ref<Stats>()
+const formation = ref<FormationResponse>({
+  formation: 'S433',
+  players: '[]'
+})
+const players = ref<Player[]>([])
 
 const fieldPlayers = computed(() => {
-  return newPlayers.value.map(p => {
-    return {
-      number: p.number,
-      name: p.name,
-      isCaptain: Boolean(p.isCaptain),
-    }
-  })
+  return JSON.parse(formation.value?.players ?? '[]')
 })
 
 const timeline = [
@@ -210,19 +214,24 @@ const timeline = [
     image: '/team-2026.jpg'
   }
 ]
-const stats = ref<Stats>()
+
 
 function getPlayers() {
   $fetch<ApiResponse<Player[]>>('/api/get/players')
     .then((res) => {
-      newPlayers.value = res.response;
+      players.value = res.response;
     })
     .catch((err) => {
       console.error(err);
     })
 }
 
-getPlayers()
+function getFormation() {
+  $fetch<ApiResponse<FormationResponse>>('/api/get/formation')
+    .then((resp) => {
+      formation.value = resp.response
+    })
+}
 
 function getStats() {
   $fetch<ApiResponse<Stats>>('/api/get/stats')
@@ -231,5 +240,7 @@ function getStats() {
     })
 }
 
+getPlayers()
 getStats();
+getFormation();
 </script>
