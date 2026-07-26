@@ -33,9 +33,9 @@
             size="lg"
             icon="lucide:calendar-days"
           >Ανά ημέρα</UBadge>
-          <PlayersAdd v-if="loggedIn">
+          <MatchAdd v-if="loggedIn" @refresh="getMatches()">
             <UButton variant="subtle" icon="material-symbols:add-2"/>
-          </PlayersAdd>
+          </MatchAdd>
         </div>
 
         <!-- Day tabs -->
@@ -61,27 +61,32 @@
       <!-- Match cards -->
       <div v-if="filteredData.length" class="space-y-4">
         <UCard
-          v-for="(m, i) in filteredData"
-          :key="i"
+          v-for="m in filteredData"
+          :key="`match-${m.id}`"
           :ui="{ root: 'bg-primary-900/40 ring-primary-800/50', body: 'p-6' }"
         >
           <div class="mb-5 flex items-center justify-between">
             <span class="text-xs font-bold uppercase tracking-widest text-primary-300">{{ competitions.find(comp => comp.value === m.competition)?.label }}</span>
-            <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
+           <div class="flex gap-2">
+             <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
+             <MatchDelete v-if="loggedIn" :match-id="m.id" @refresh="getMatches()" >
+               <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
+             </MatchDelete>
+           </div>
           </div>
           <div class="flex items-center justify-between gap-4">
             <div class="flex flex-1 flex-col items-center gap-3 text-center">
-              <img src="/logo.webp" :alt="m.home" class="h-12 w-12 object-contain" />
-              <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ m.home }}</span>
+              <img :src="teams.find(t => t.value === m.home)?.icon" :alt="m.home" class="h-12 w-12 object-cover" />
+              <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ teams.find(t => t.value === m.home)?.label  }}</span>
             </div>
             <div class="flex shrink-0 items-center gap-2 text-3xl font-black text-white">
               <span>{{ m.status === 'pending' ? '-' : m.hs }}</span>
               <span class="text-white/40">:</span>
-              <span>{{ m.status === 'pending' ? '-' : m.hs }}</span>
+              <span>{{ m.status === 'pending' ? '-' : m.as }}</span>
             </div>
             <div class="flex flex-1 flex-col items-center gap-3 text-center">
-              <img src="/logo.webp" :alt="m.away" class="h-12 w-12 object-contain" />
-              <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ m.away }}</span>
+              <img :src="teams.find(t => t.value === m.away)?.icon" :alt="m.away" class="h-12 w-12 object-cover rounded-full" />
+              <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ teams.find(t => t.value === m.away)?.label  }}</span>
             </div>
           </div>
           <UBadge variant="subtle" size="sm" color="warning" class="block mx-auto w-fit">{{ new Date(m.date).toLocaleString('el-GR') }}</UBadge>
@@ -93,6 +98,8 @@
 </template>
 
 <script setup lang="ts">
+import teams from '~/assets/teams.json';
+
 useSeoMeta({ title: 'ΑΕ Βιτσιου — Αγώνες', description: 'Πρόγραμμα και αποτελέσματα αγώνων.' })
 
 const {loggedIn} = useUserSession()

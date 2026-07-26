@@ -27,9 +27,13 @@
 
 <script lang="ts">
 import type { SelectItem } from '@nuxt/ui'
+interface Emits {
+  refresh: [];
+}
 </script>
 
 <script setup lang="ts">
+defineEmits<Emits>()
 const form = useTemplateRef<HTMLFormElement>('form');
 const open = ref(false);
 const loading = ref(false);

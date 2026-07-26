@@ -36,6 +36,12 @@ export interface Match {
   createdAt: Date;
 }
 
+export interface Goal {
+  playerId: number;
+  matchId: number;
+  ga: number;
+}
+
 export interface Stats {
   "totalGoals": number;
   "avgGoals": number;

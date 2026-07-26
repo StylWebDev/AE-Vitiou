@@ -54,7 +54,7 @@
       </div>
       <div class="flex justify-between items-center">
         <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
-        <PlayersAdd v-if="loggedIn">
+        <PlayersAdd v-if="loggedIn" @refresh="getPlayers()">
           <UButton variant="subtle" icon="material-symbols:add-2"/>
         </PlayersAdd>
       </div>

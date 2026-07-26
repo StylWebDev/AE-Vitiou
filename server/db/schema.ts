@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, unique } from 'drizzle-orm/sqlite-core'
 
 export const player = sqliteTable('players', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -29,11 +29,13 @@ export const goals = sqliteTable('goals', {
   matchId: integer('match_id').notNull().references(() => player.id, {onDelete: "cascade"}),
   ga: integer('ga').notNull(),
   createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),
-})
+}, (table) => [
+    unique().on(table.matchId, table.playerId)
+  ]
+)
 
 export const formation = sqliteTable('formation', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   formation: text({enum: ['S433', 'S343', 'S442', 'S352', 'S451', 'S3421', 'S4231']}).notNull().default('S433'),
   players: text({mode: "json"}).notNull().default(''),
 })
-
