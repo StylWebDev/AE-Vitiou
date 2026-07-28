@@ -16,7 +16,7 @@
     </UDashboardNavbar>
 
     <!-- Page content -->
-    <UMain class="flex-1">
+    <UMain class="flex-1 min-h-[calc(100vh-var(--ui-header-height)-var(--ui-footer-height)]">
       <slot />
     </UMain>
 

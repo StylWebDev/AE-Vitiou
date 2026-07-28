@@ -1,6 +1,6 @@
 <template>
-  <div class="size-full flex justify-center items-center">
-    <UForm ref="form" :schema="schema" :state="state" class="p-4 ring ring-primary-700 bg-primary-900 rounded-2xl space-y-4" @submit.prevent="login" >
+  <UPageSection>
+    <UForm ref="form" :schema="schema" :state="state" class="p-4 max-w-screen-sm mx-auto ring ring-primary-700 bg-primary-900 rounded-2xl space-y-4" @submit.prevent="login" >
       <UEmpty :avatar="{ icon: `material-symbols:deployed-code-account`, color: 'secondary'}" size="xl" variant="naked" title="Σύνδεση Χρήστη" description="Η σύνδεση είναι δυνατή μόνο για τους διαχειριστές της ΑΕ-Βιτσίου και του developer της σελίδας" :ui="{title: 'text-secondary', description: 'text-primary-300'}" />
       <UFormField size="lg" name="email" label="Em@il" required :ui="{label: 'text-primary-100'}" >
         <UInput v-model="state.email" class="w-full" :ui="{base: 'bg-primary-950 text-white'}"/>
@@ -10,7 +10,7 @@
       </UFormField>
       <UButton label="Σύνδεση" class="w-full justify-center cursor-pointer" @click="form?.submit()"  />
     </UForm>
-  </div>
+  </UPageSection>
 </template>
 
 <script setup lang="ts">
