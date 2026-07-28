@@ -62,6 +62,20 @@ export interface Stats {
   "topScorers": Player[] ;
 }
 
+export interface Post {
+  id: number;
+  img: PostImg;
+  date: string;
+  title: string;
+  description: string;
+  link: string;
+}
+
+export interface PostImg {
+  type: string;
+  data: number[];
+}
+
 export interface FormationResponse {
   formation?: FormationType;
   players?: string;
