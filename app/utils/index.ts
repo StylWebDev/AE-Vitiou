@@ -8,7 +8,7 @@ export const HTTP_METHODS = {
   PUT: 'PUT',
   PATCH: 'PATCH',
   DELETE: 'DELETE',
-} as HTTPMethods
+} as const
 
 export const positions = {
   GK: 'Τερματοφύλακας',

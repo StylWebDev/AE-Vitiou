@@ -151,8 +151,7 @@
                 :src="t.image"
                 :alt="`ΑΕ Βιτσιου — ${t.year}`"
                 class="aspect-4/3 w-full object-cover opacity-90"
-                onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center','aspect-[4/3]'); this.parentElement.innerHTML='<span class=\'text-white/30 text-xs uppercase tracking-widest\'>Φωτογραφία ομάδας</span>'"
-              />
+              >
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@
               name="lucide:medal"
               class="absolute left-1/2 top-0 h-8 w-8 -translate-x-1/2 -translate-y-1/2 group-data-[rank=1]:text-info-300 group-data-[rank=2]:text-success-200 group-data-[rank=3]:text-secondary-200"
             />
-            <img src="/logo.webp" alt="ae_vitsiou_img" class="mx-auto mb-3 h-14 w-14 object-contain" />
+            <img src="/logo.webp" alt="ae_vitsiou_img" class="mx-auto mb-3 h-14 w-14 object-contain" >
             <p class="text-sm font-bold uppercase tracking-wide text-white">{{ scorer.player.name }}</p>
             <p class="mt-1 text-[11px] uppercase tracking-widest text-warning">{{positions[scorer.player.pos]}}</p>
             <p

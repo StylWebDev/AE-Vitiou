@@ -79,7 +79,7 @@
           </div>
           <div class="flex items-center justify-between gap-4">
             <div class="flex flex-1 flex-col items-center gap-3 text-center">
-              <img :src="teams.find(t => t.value === m.home)?.icon" :alt="m.home" class="h-12 w-12 object-cover" />
+              <img :src="teams.find(t => t.value === m.home)?.icon" :alt="m.home" class="h-12 w-12 object-cover" >
               <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ teams.find(t => t.value === m.home)?.label  }}</span>
             </div>
             <div class="flex shrink-0 items-center gap-2 text-3xl font-black text-white">
@@ -88,7 +88,7 @@
               <span>{{ m.status === 'pending' ? '-' : m.as }}</span>
             </div>
             <div class="flex flex-1 flex-col items-center gap-3 text-center">
-              <img :src="teams.find(t => t.value === m.away)?.icon" :alt="m.away" class="h-12 w-12 object-cover rounded-full" />
+              <img :src="teams.find(t => t.value === m.away)?.icon" :alt="m.away" class="h-12 w-12 object-cover rounded-full" >
               <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ teams.find(t => t.value === m.away)?.label  }}</span>
             </div>
           </div>
