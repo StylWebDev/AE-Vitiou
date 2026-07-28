@@ -21,6 +21,10 @@ export default defineNuxtConfig({
       {
         from: '@vueuse/core',
         imports: ['breakpointsTailwind', 'useBreakpoints', 'useTimeout']
+      },
+      {
+        from: '@vueuse/integrations/useSortable',
+        imports: ['useSortable']
       }
     ]
   },
@@ -28,7 +32,8 @@ export default defineNuxtConfig({
   $development: {
     hub: {
       db: {
-        dialect: 'sqlite'
+        dialect: 'sqlite',
+        // driver: 'd1-http'
       }
     }
   },

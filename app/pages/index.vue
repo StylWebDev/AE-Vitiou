@@ -1,47 +1,3 @@
-<script setup lang="ts">
-useSeoMeta({
-  title: 'ΑΕ Βιτσιου — Αρχική',
-  description: 'Καλωσήρθατε στην επίσημη ιστοσελίδα της ΑΕ Βιτσιου.'
-})
-
-const champion = {
-  club: 'ΑΕ Βιτσιου',
-  tournament: 'ΕΠΣ Καστοριάς - Κύπελο Καστοριάς',
-  final: { home: 'ΑΕ Βιτσιου', away: 'Αντίπαλος ΦΣ', hs: 3, as: 1 },
-  period: '15–23 Μαΐου 2026'
-}
-
-const stats = [
-  { icon: 'lucide:swords', value: '43', label: 'Αγώνες' },
-  { icon: 'famicons:football', value: '30', label: 'Νίκες' },
-  { icon: 'maki:soccer-11', value: '128', label: 'Γκολ' },
-  { icon: 'lucide:flame', value: '22', label: 'Βαθμοί' },
-  { icon: 'lucide:trophy', value: '1', label: 'Τίτλοι' },
-]
-
-const road = [
-  { round: 'Προημιτελικός', opp: 'Νικολάου FC', score: '5–1' },
-  { round: 'Ημιτελικός', opp: 'Drink Team', score: '3–2' },
-  { round: 'Τελικός', opp: 'Αντίπαλος ΦΣ', score: '3–1' },
-  { round: 'Ημιτελικός', opp: 'Drink Team', score: '3–2' },
-  { round: 'Τελικός', opp: 'Αντίπαλος ΦΣ', score: '3–1' }
-]
-
-const scorers = [
-  { rank: 1, name: 'Σπύρος Καραβασιλης', club: 'FDW', goals: 18 },
-  { rank: 2, name: 'Θωμάς Σταμούλης', club: 'FDW', goals: 12 },
-  { rank: 3, name: 'Μιχάλης Μίχος', club: 'FDW', goals: 9 },
-  { rank: 4, name: 'Βαγγέλης Γακιας', club: 'CB', goals: 7 },
-  { rank: 5, name: 'Βασίλης Εστιαδης', club: 'EXT', goals: 6 }
-]
-
-const thrillers = [
-  { total: '7 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Drink Team', as: 4, bs: 3 },
-  { total: '6 Γκολ', a: 'ΑΕ Βιτσιου', b: 'Νικολάου FC', as: 5, bs: 1 },
-  { total: '5 Γκολ', a: 'Δόξα', b: 'Xavalencia', as: 3, bs: 2 }
-]
-</script>
-
 <template>
     <UPageSection>
       <section
@@ -49,20 +5,20 @@ const thrillers = [
       >
         <div class="flex flex-col items-center text-center">
           <UBadge color="warning" variant="subtle" class="mb-6 rounded-2xl uppercase tracking-widest">
-            Ολοκληρώθηκε · {{ champion.period }}
+            Ολοκληρώθηκε · {{ exists(stats?.lastMatches[0]) ? new Date(stats.lastMatches[0].date).toLocaleString('el-GR') : '-' }}
           </UBadge>
           <NuxtImg src="/logo.webp" alt="ΑΕ Βιτσιου" class="my-4 h-24 w-24 object-contain" />
-          <h1 class="text-4xl font-black italic uppercase tracking-tight sm:text-6xl">{{ champion.club }}</h1>
-          <p class="mt-2 text-sm uppercase tracking-widest text-white/60">{{ champion.tournament }}</p>
+          <h1 class="text-4xl font-black italic uppercase tracking-tight sm:text-6xl">ΑΕ ΒΙΤΣΙΟΥ</h1>
+          <p class="mt-2 text-sm uppercase tracking-widest text-white/60">ΕΠΣ Καστοριάς - Κύπελο Καστοριάς</p>
 
           <div class="mt-8 w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">Τελευταίος αγώνας</p>
             <div class="flex items-center justify-between gap-3">
-              <span class="flex-1 truncate text-right font-semibold">{{ champion.final.home }}</span>
+              <span class="flex-1 truncate text-right font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.home)?.label  ?? 'Χωρίς Όνομα'}}</span>
               <UBadge variant="subtle" size="xl" color="success">
-                {{ champion.final.hs }} – {{ champion.final.as }}
+                {{ stats?.lastMatches[0]?.hs ?? '-' }} – {{ stats?.lastMatches[0]?.as ?? '-' }}
               </UBadge>
-              <span class="flex-1 truncate text-left font-semibold">{{ champion.final.away }}</span>
+              <span class="flex-1 truncate text-left font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.away)?.label ?? 'Χωρίς Όνομα' }}</span>
             </div>
           </div>
         </div>
@@ -70,76 +26,145 @@ const thrillers = [
 
       <section>
         <UPageFeature icon="lucide:bar-chart-3" title="Σε αριθμούς" description="Η ΧΡΟΝΙΑ ΣΕ ΝΟΥΜΕΡΑ"/>
-        <UPageGrid class="lg:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-4">
+        <UPageGrid class="lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4">
           <div
-            v-for="s in stats"
-            :key="s.label"
             class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
           >
-            <UIcon :name="s.icon" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-            <p class="text-3xl font-black text-white">{{ s.value }}</p>
-            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">{{ s.label }}</p>
+            <UIcon name="lucide:swords" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{ stats?.totalMatches ?? '-' }}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Αγώνες</p>
+          </div>
+          <div
+            class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
+          >
+            <UIcon name="famicons:football" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{ stats?.wins ?? '-' }}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Νίκες</p>
+          </div>
+          <div
+            class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
+          >
+            <UIcon name="maki:soccer-11" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{stats?.totalGoals ?? '-'}}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Γκολ</p>
+          </div>
+          <div
+            class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
+          >
+            <UIcon name="hugeicons:chart-average" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{ stats?.avgGoals ?? '-' }}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Μ.Ο. Γκολ / Αγώνα</p>
+          </div>
+          <div
+            class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
+          >
+            <UIcon name="lucide:flame" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{ stats?.points ?? '-' }}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Βαθμοί</p>
+          </div>
+          <div
+            class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5 text-center"
+          >
+            <UIcon name="lucide:trophy" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+            <p class="text-3xl font-black text-white">{{ stats?.titles ?? '-' }}</p>
+            <p class="mt-1 text-xs uppercase tracking-wider text-white/50">Τίτλοι</p>
           </div>
         </UPageGrid>
       </section>
 
       <section>
         <UPageFeature icon="lucide:bar-chart-3" title="Μπάλα είναι και γυρίζει" description="ΟΙ ΤΕΛΕΥΤΑΙΟΙ 5 ΑΓΏΝΕΣ"/>
-        <div class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
+        <div v-if="exists(stats) && stats.lastMatches.length > 0" class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
           <div
-            v-for="r in road"
-            :key="r.round"
+            v-for="match in stats.lastMatches"
+            :key="`thriller-match-${match.id}`"
             class="flex items-center justify-between gap-4 p-5 "
           >
-            <div class="flex min-w-0 items-center gap-4">
-              <span class="shrink-0 text-xs font-bold uppercase tracking-widest text-secondary-300">{{ r.round }}</span>
-              <span class="truncate text-white/80">vs {{ r.opp }}</span>
+            <div :data-team="match.home === 'ae_vitsiou'" class="group flex min-w-0 items-center gap-4">
+              <span class="shrink-0 text-xs font-bold uppercase tracking-widest group-data-[team=false]:text-secondary-300 group-data-[team=true]:text-success"><UAvatar size="xs" :src="teams.find(t => t.value === match.home)?.icon" />  {{ teams.find(t => t.value === match.home)?.label  }}</span>
+              <span class="truncate text-white/80">vs</span>
+              <span class="truncate text-xs font-bold  text-white/80 group-data-[team=true]:text-secondary-300 group-data-[team=false]:text-success"><UAvatar size="xs" :src="teams.find(t => t.value === match.away)?.icon" />  {{teams.find(t => t.value === match.away)?.label}}</span>
             </div>
-            <span class="shrink-0 font-mono text-lg font-black text-white">{{ r.score }}</span>
+            <span class="shrink-0 font-mono text-lg font-black text-white">{{match.hs}}-{{match.as}}</span>
           </div>
         </div>
+        <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παιχνίδια" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
       </section>
 
       <section>
-        <UPageFeature icon="lucide:bar-chart-3" title="Σπάσε τα δύχτια" description="ΟΙ ΣΚΟΡΕΡ ΤΗΣ ΟΜΑΔΑΣ"/>
-        <div class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
+        <UPageFeature icon="lucide:bar-chart-3" title="Σπάσε τα δύχτια" description="ΟΙ TOP ΣΚΟΡΕΡ ΤΗΣ ΟΜΑΔΑΣ"/>
+        <div v-if="exists(stats) && stats.topScorers.length > 0" class="overflow-hidden rounded-2xl border divide-y divide-primary-800/40 border-primary-800/40 bg-primary-900/40">
           <div
-            v-for="s in scorers"
-            :key="s.rank"
-            class="flex items-center gap-4 p-5"
+            v-for="(scorer, i) in stats.topScorers"
+            :key="`top-scorer-${scorer.id}`"
+            class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
+            :class="i !== stats.topScorers.length - 1 ? 'border-b border-primary-800/40' : ''"
           >
-            <span class="w-6 text-lg font-black text-secondary-300">{{ s.rank }}</span>
-            <div class="min-w-0 flex-1">
-              <p class="truncate font-bold text-white">{{ s.name }}</p>
-              <p class="truncate text-xs text-warning">{{ s.club }}</p>
+            <div class="flex items-center gap-4 max-md:justify-center max-lg:w-full">
+              <span class="w-6 text-sm font-bold text-white/40">{{ scorer.number }}</span>
+              <UBadge
+                size="lg"
+                :color="PosColor[scorer.pos]"
+                :label="scorer.pos"
+                class="rounded-full min-w-12 justify-center"
+              />
+              <span class="truncate font-semibold uppercase tracking-wide text-white">
+              {{ scorer.name }}
+              <span v-if="scorer.isCaptain" class="text-xs text-orange-500">(c)</span>
+            </span>
             </div>
-            <div class="shrink-0 text-right">
-              <p class="text-2xl font-black text-secondary-300">{{ s.goals }}</p>
-              <p class="text-[10px] uppercase tracking-wider text-white/40">Γκολ</p>
+
+            <div class="flex items-center gap-4 max-lg:justify-between max-lg:w-9/10">
+              <span class="shrink-0 text-sm font-black text-secondary-300 uppercase tracking-wide">
+                {{ positions[scorer.pos] }}
+              </span>
+              <UBadge size="md" variant="subtle" color="success" label="-" class="rounded-full" />
             </div>
           </div>
         </div>
+        <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
       </section>
 
       <section class="pb-4">
-        <UPageFeature icon="lucide:bar-chart-3" title="Φυγαμε για μουντιαλ" description="ΟΙ ΑΓΩΝΕΣ ΜΕ ΤΑ ΠΕΡΙΣΣΟΤΕΡΑ ΓΚΟΛ"/>
-        <UPageGrid class="lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+        <UPageFeature icon="lucide:bar-chart-3" title="Φυγαμε για μουντιαλ" description="ΟΙ ΑΓΩΝΕΣ ΜΕ ΤΑ ΠΕΡΙΣΣΟΤΕΡΑ ΓΚΟΛ ΤΗΣ ΟΜΑΔΑΣ"/>
+        <UPageGrid v-if="exists(stats) && stats.topScoredMatches.length > 0" class="lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
           <div
-            v-for="(t, i) in thrillers"
-            :key="i"
+            v-for="match in stats.topScoredMatches"
+            :key="`thriller-match-${match.id}`"
             class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-5"
           >
-            <p class="mb-4 text-xs font-bold uppercase tracking-widest text-secondary-300">{{ t.total }}</p>
+            <p class="mb-4 text-xs font-bold uppercase tracking-widest text-secondary-300">{{ match.hs }}</p>
             <div class="flex items-center justify-between">
-              <span class="truncate font-semibold text-white">{{ t.a }}</span>
-              <span class="font-mono font-black text-white">{{ t.as }}</span>
+              <span class="truncate font-semibold text-white"><UAvatar size="xs" :src="teams.find(t => t.value === match.home)?.icon" /> {{ teams.find(t => t.value === match.home)?.label}}</span>
+              <span class="font-mono font-black text-white">{{ match.hs }}</span>
             </div>
             <div class="mt-2 flex items-center justify-between">
-              <span class="truncate font-semibold text-white/70">{{ t.b }}</span>
-              <span class="font-mono font-black text-white/70">{{ t.bs }}</span>
+              <span class="truncate font-semibold text-white/70"><UAvatar size="xs" :src="teams.find(t => t.value === match.away)?.icon"/> {{ teams.find(t => t.value === match.away)?.label }}</span>
+              <span class="font-mono font-black text-white/70">{{ match.as }}</span>
             </div>
           </div>
         </UPageGrid>
+        <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παιχνίδια" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
       </section>
     </UPageSection>
 </template>
+
+<script setup lang="ts">
+import teams from '~/assets/teams.json'
+
+useSeoMeta({
+  title: 'ΑΕ Βιτσιου — Αρχική',
+  description: 'Καλωσήρθατε στην επίσημη ιστοσελίδα της ΑΕ Βιτσιου.'
+})
+
+const stats = ref<Stats>();
+
+function getStats() {
+  $fetch<ApiResponse<Stats>>('/api/get/stats')
+    .then((resp) => {
+      stats.value = resp.response
+    })
+}
+
+getStats();
+</script>

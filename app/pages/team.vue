@@ -1,107 +1,3 @@
-<script setup lang="ts">
-useSeoMeta({
-  title: 'ΑΕ Βιτσιου — Η Ομάδα',
-  description: 'Το ρόστερ, η ιστορία και τα στατιστικά της ΑΕ Βιτσιου.'
-})
-
-
-const breakpoints = useBreakpoints(breakpointsTailwind);
-const lgAndDown = breakpoints.smallerOrEqual('md')
-
-type Pos = 'GK' | 'DEF' | 'MID' | 'FWD'
-const posColor: Record<Pos, 'primary' | 'secondary' | 'success' | 'warning'> = {
-  GK: 'warning',
-  DEF: 'primary',
-  MID: 'secondary',
-  FWD: 'success'
-}
-
-
-const players = ref([
-  { number: 1, name: 'Γιώργος Παπαδόπουλος', pos: 'GK' as Pos, position: 'Τερματοφύλακας', stat: 'GA: 12', isCaptain: false },
-  { number: 2, name: 'Νίκος Ιωάννου', pos: 'DEF' as Pos, position: 'Δεξί μπακ', stat: 'App: 22', isCaptain: false },
-  { number: 4, name: 'Δημήτρης Καρράς', pos: 'DEF' as Pos, position: 'Στόπερ', stat: 'App: 24', isCaptain: false },
-  { number: 5, name: 'Θανάσης Μήτσου', pos: 'DEF' as Pos, position: 'Στόπερ', stat: 'App: 20', isCaptain: false },
-  { number: 3, name: 'Κώστας Ζήκος', pos: 'DEF' as Pos, position: 'Αριστερό μπακ', stat: 'App: 19', isCaptain: false },
-  { number: 6, name: 'Βαγγέλης Γακιας', pos: 'MID' as Pos, position: 'Αμυντικό χαφ', stat: 'Ast: 6',isCaptain: true },
-  { number: 8, name: 'Θωμάς Σταμούλης', pos: 'MID' as Pos, position: 'Κεντρικό χαφ', stat: 'Γκολ: 12', isCaptain: false },
-  { number: 10, name: 'Σπύρος Καραβασιλης', pos: 'MID' as Pos, position: 'Επιθετικό χαφ', stat: 'Γκολ: 18', isCaptain: false },
-  { number: 7, name: 'Μιχάλης Μίχος', pos: 'FWD' as Pos, position: 'Δεξί εξτρέμ', stat: 'Γκολ: 9', isCaptain: false },
-  { number: 11, name: 'Βασίλης Εστιαδης', pos: 'FWD' as Pos, position: 'Αριστερό εξτρέμ', stat: 'Γκολ: 6', isCaptain: false },
-  { number: 9, name: 'Απόστολος Ρεβησιος', pos: 'FWD' as Pos, position: 'Φορ', stat: 'Γκολ: 7', isCaptain: false }
-])
-
-const fieldPlayers = computed(() => {
-  return players.value.map(p => {
-    return {
-      number: p.number,
-      name: p.name,
-      isCaptain: p.isCaptain,
-    }
-  })
-})
-
-
-// ————— Club history timeline —————
-const timeline = [
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1978.jpg'
-  },
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1985.jpg'
-  },
-  {
-    year: '1999',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-1999.jpg'
-  },
-  {
-    year: 'XXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-    image: '/team-2012.jpg'
-  },
-  {
-    year: 'XXXX',
-    title: 'XXXX',
-    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.',
-    image: '/team-2026.jpg'
-  }
-]
-
-const trophies = [
-  { label: '1980s', cups: 0, titles: 0 },
-  { label: '1990s', cups: 1, titles: 0 },
-  { label: '2000s', cups: 1, titles: 0 },
-  { label: '2010s', cups: 2, titles: 1 },
-  { label: '2020s', cups: 3, titles: 2 }
-]
-
-const goalsPerMatch = [
-  { match: 'Α1', goals: 2 },
-  { match: 'Α2', goals: 3 },
-  { match: 'Α3', goals: 1 },
-  { match: 'Α4', goals: 4 },
-  { match: 'Α5', goals: 5 },
-  { match: 'Α6', goals: 2 },
-  { match: 'Α7', goals: 3 },
-  { match: 'Α8', goals: 4 },
-  { match: 'Α9', goals: 3 },
-  { match: 'Α10', goals: 3 }
-]
-
-const totalCups = trophies.reduce((s, t) => s + t.cups, 0)
-const totalTitles = trophies.reduce((s, t) => s + t.titles, 0)
-const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch.length).toFixed(1)
-</script>
-
 <template>
   <UPageSection >
       <!-- Header -->
@@ -118,17 +14,17 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
           <UIcon name="lucide:trophy" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ totalTitles }}</p>
-          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Πρωταθλήματα</p>
+          <p class="text-4xl font-black text-white">{{ stats?.titles ?? '-' }}</p>
+          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Τίτλοι</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
-          <UIcon name="mdi:trophy-award" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ totalCups }}</p>
-          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Κύπελλα</p>
+          <UIcon name="tabler:soccer-field" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+          <p class="text-4xl font-black text-white"> {{stats?.totalMatches ?? '-'}} </p>
+          <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Παιχνίδια</p>
         </div>
         <div class="rounded-2xl border border-primary-800/40 bg-primary-900/40 p-6 text-center">
-          <UIcon name="lucide:flame" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
-          <p class="text-4xl font-black text-white">{{ avgGoals }}</p>
+          <UIcon name="hugeicons:chart-average" class="mx-auto mb-3 h-6 w-6 text-secondary-300" />
+          <p class="text-4xl font-black text-white">{{ stats?.avgGoals.toFixed(1) ?? '-'}}</p>
           <p class="mt-1 text-xs uppercase tracking-widest text-white/50">Μ.Ο. Γκολ / Αγώνα</p>
         </div>
       </div>
@@ -140,7 +36,13 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
         <UIcon name="streamline-ultimate:soccer-field-bold" class="h-5 w-5" />
         <span class="text-xs font-bold uppercase tracking-widest">Βασική ενδεκάδα</span>
       </div>
-      <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
+      <div class="flex justify-between items-center">
+        <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
+        <FormationSet v-if="loggedIn" :players="players" :football-schema="formation" @refresh="getFormation()">
+          <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+        </FormationSet>
+      </div>
+<!--      :receiver-system="formation.formation"-->
       <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30 p-2 sm:p-4">
         <LayoutsSoccerField
           :orientation="lgAndDown ? 'portrait' : 'landscape'"
@@ -156,8 +58,14 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
         <UIcon name="lucide:list" class="h-5 w-5" />
         <span class="text-xs font-bold uppercase tracking-widest">Ρόστερ</span>
       </div>
-      <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
-      <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
+      <div class="flex justify-between items-center">
+        <h2 class="mb-6 text-2xl font-black italic text-white">ΠΑΙΚΤΕΣ</h2>
+        <PlayersAdd v-if="loggedIn" @refresh="getPlayers()">
+          <UButton variant="subtle" icon="material-symbols:add-2"/>
+        </PlayersAdd>
+      </div>
+
+      <div v-if="players.length > 0" class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
         <div
           v-for="(s, i) in players"
           :key="s.number"
@@ -168,21 +76,34 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
             <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
             <UBadge
               size="lg"
-              :color="posColor[s.pos]"
+              :color="PosColor[s.pos]"
               :label="s.pos"
               class="rounded-full min-w-12 justify-center"
             />
-            <span class="truncate font-semibold uppercase tracking-wide text-white">{{ s.name }}</span>
+            <span class="truncate font-semibold uppercase tracking-wide text-white">
+              {{ s.name }}
+              <span v-if="s.isCaptain" class="text-xs text-orange-500">(c)</span>
+            </span>
           </div>
 
           <div class="flex items-center gap-4 max-lg:justify-between max-lg:w-9/10">
               <span class="shrink-0 text-sm font-black text-secondary-300 uppercase tracking-wide">
-                {{ s.position }}
+                {{ positions[s.pos] }}
               </span>
-            <UBadge size="md" variant="subtle" color="success" :label="s.stat" class="rounded-full" />
+            <div class="flex">
+              <UBadge size="md" variant="subtle" color="success" label="-" class="rounded-full" />
+              <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
+                <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+              </PlayersEdit>
+              <PlayersDelete v-if="loggedIn" :player-id="s.id" @refresh="getPlayers()">
+                <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
+              </PlayersDelete>
+            </div>
+
           </div>
         </div>
       </div>
+      <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες με βάση την αναζήτηση σας" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
     </section>
 
 
@@ -230,14 +151,97 @@ const avgGoals = (goalsPerMatch.reduce((s, g) => s + g.goals, 0) / goalsPerMatch
                 :src="t.image"
                 :alt="`ΑΕ Βιτσιου — ${t.year}`"
                 class="aspect-4/3 w-full object-cover opacity-90"
-                onerror="this.style.display='none'; this.parentElement.classList.add('flex','items-center','justify-center','aspect-[4/3]'); this.parentElement.innerHTML='<span class=\'text-white/30 text-xs uppercase tracking-widest\'>Φωτογραφία ομάδας</span>'"
-              />
+              >
             </div>
           </div>
         </div>
       </div>
     </section>
-
-
   </UPageSection>
 </template>
+
+<script setup lang="ts">
+useSeoMeta({
+  title: 'ΑΕ Βιτσιου — Η Ομάδα',
+  description: 'Το ρόστερ, η ιστορία και τα στατιστικά της ΑΕ Βιτσιου.'
+})
+
+const {loggedIn} = useUserSession()
+
+const breakpoints = useBreakpoints(breakpointsTailwind);
+const lgAndDown = breakpoints.smallerOrEqual('md')
+const stats = ref<Stats>()
+const formation = ref<FormationResponse>({
+  formation: 'S433',
+  players: '[]'
+})
+const players = ref<Player[]>([])
+
+const fieldPlayers = computed(() => {
+
+  const playerIds: number[] = JSON.parse(formation.value?.players ?? '[]')
+  return playerIds.map(id => players.value.find(player => player.id === id)).filter((player) => exists(player))
+})
+
+const timeline = [
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1978.jpg'
+  },
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1985.jpg'
+  },
+  {
+    year: '1999',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-1999.jpg'
+  },
+  {
+    year: 'XXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: '/team-2012.jpg'
+  },
+  {
+    year: 'XXXX',
+    title: 'XXXX',
+    text: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.',
+    image: '/team-2026.jpg'
+  }
+]
+
+
+function getPlayers() {
+  $fetch<ApiResponse<Player[]>>('/api/get/players')
+    .then((res) => {
+      players.value = res.response;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+}
+
+function getFormation() {
+  $fetch<ApiResponse<FormationResponse>>('/api/get/formation')
+    .then((resp) => {
+      formation.value = resp.response
+    })
+}
+
+function getStats() {
+  $fetch<ApiResponse<Stats>>('/api/get/stats')
+    .then((resp) => {
+      stats.value = resp.response
+    })
+}
+
+getPlayers()
+getStats();
+getFormation();
+</script>

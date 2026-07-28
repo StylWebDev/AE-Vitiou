@@ -1,0 +1,37 @@
+[
+  {
+    "label": "ΑΕ ΒΙΤΣΙΟΥ",
+    "value": "ae_vitsiou",
+    "icon": "/logo.webp"
+  },
+  {
+    "label": "ΚΕΡΑΥΝΟΣ ΧΙΛΙΟΔΕΝΔΡΟΥ",
+    "value": "keravnos",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/11/keravnos-364x400.jpg"
+  },
+  {
+    "label": "ΠΑΣ ΛΕΥΚΗΣ",
+    "value": "leuki",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/11/pas-lefk.jpg"
+  },
+  {
+    "label": "ΝΕΟ ΜΑΚΡΟΧΩΡΙ",
+    "value": "makroxori",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/11/mak_new2.png"
+  },
+  {
+    "label": "ΦΛΑΤΣΑΤΑ ΟΙΝΟΗΣ",
+    "value": "oinoi",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/10/299912701_545311487390388_4340710031652039406_n-400x400.jpg"
+  },
+  {
+    "label": "ΡΟΣΣΟΝΕΡΙ",
+    "value": "rossoneri",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/11/rossonieri.jpg"
+  },
+  {
+    "label": "ΕΛΠΙΔΕΣ ΜΕΣ/ΜΙΑΣ",
+    "value": "mesopotamia",
+    "icon": "https://epskastorias.gr/wp-content/uploads/2024/11/elpides_mes.jpg"
+  }
+]

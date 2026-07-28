@@ -63,3 +63,7 @@ body  {
   opacity: 0;
   transform: translateY(-12px);
 }
+
+button {
+  cursor: pointer;
+}
