@@ -21,6 +21,10 @@ export default defineNuxtConfig({
       {
         from: '@vueuse/core',
         imports: ['breakpointsTailwind', 'useBreakpoints', 'useTimeout']
+      },
+      {
+        from: '@vueuse/integrations/useSortable',
+        imports: ['useSortable']
       }
     ]
   },

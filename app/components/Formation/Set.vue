@@ -10,9 +10,24 @@
           <USelect v-model="state.players" class="w-full" multiple :items="selectPlayers" :ui="{base: 'bg-primary-950 text-white'}"/>
         </UFormField>
       </UForm>
+      <div ref="el" class="overflow-hidden rounded-lg border border-primary-100 m-4 bg-primary-950 *:border-b last:border-b--0">
+        <div v-for="item in state.players" :key="item" class="w-full bg-primary-950  font-medium  p-2 flex justify-between text-lg capitalize text-white border-primary-800/40 ">
+          <div class="flex gap-2 items-center">
+            <UBadge
+              size="md"
+              :color="PosColor[players.find(player => item === player.id)!.pos]"
+              :label="players.find(player => item === player.id)?.pos"
+              class="min-w-10 rounded-full justify-center"
+            />
+            {{ players.find(player => item === player.id)?.name}}
+          </div>
+
+          <UIcon name="flowbite:bars-outline" class="size-6"/>
+        </div>
+      </div>
     </template>
     <template #footer>
-      <UButton color="success" size="xl" label="Αποθήκευση" icon="material-symbols:delete-rounded" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
+      <UButton color="success" size="xl" label="Αποθήκευση" icon="ic:sharp-save-as" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
     </template>
   </UModal>
 </template>
@@ -41,20 +56,24 @@ const schema = zod.object({
 
 const formations: SelectItem[] = ['S433', 'S343', 'S442', 'S352', 'S451', 'S3421', 'S4231']
 
+const el = useTemplateRef('el')
 const state = reactive<ZodOutput<typeof schema>>({
-  formation: footballSchema.formation ?? 'S433',
-  players: JSON.parse(footballSchema.players ?? '[]'),
+  formation: 'S433',
+  players: [],
 })
 
-const selectPlayers = computed<SelectItem[]>(() => players.map((p: Player) => ({
-  label: p.name,
-  value: p.id,
-  avatar: {
-    color: PosColor[p.pos],
-    text: p.pos,
-    size: 'md'
-  }
-})))
+const selectPlayers = computed<SelectItem[]>(() => {
+  return players.map((p: Player) => ({
+    label: p.name,
+    value: p.id,
+    avatar: {
+      color: PosColor[p.pos],
+      text: p.pos,
+      size: 'md'
+    }
+  }))
+
+})
 
 const toast = useToast();
 const open = ref(false);
@@ -91,4 +110,14 @@ function setFormation() {
   })
 }
 
+watch(() => footballSchema.players, () => {
+  state.formation = footballSchema.formation ?? 'S433'
+  state.players = JSON.parse(footballSchema.players ?? '[]');
+}, {immediate:true, deep: true})
+
+watch(open, async (isOpen) => {
+  if (!isOpen) return
+  await nextTick()
+  useSortable(el, state.players)
+})
 </script>

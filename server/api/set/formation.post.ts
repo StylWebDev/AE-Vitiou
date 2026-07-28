@@ -4,7 +4,16 @@ import {eq} from 'drizzle-orm'
 export default defineEventHandler(async (event) => {
   const data = await readBody(event);
   try {
-    await db.update(schema.formation).set({...data}).where(eq(schema.formation.id,1));
+    await db
+      .insert(schema.formation)
+      .values({id: 1, ...data })
+      .onConflictDoUpdate({
+        target: schema.formation.id,
+        set: {
+          formation: data.formation,
+          players: data.players
+        }
+      })
     return {status: 200, response: 'successfully updated formation'};
   }catch{
     throw createError({

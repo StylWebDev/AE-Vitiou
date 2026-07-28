@@ -28,7 +28,7 @@ export interface Player {
   name: string;
   number: number;
   pos: 'GK' | 'DEF' | 'MID' | 'EXT' | 'FWD';
-  isCaptain: BoolInt;
+  isCaptain: boolean;
   createdAt: string;
 }
 

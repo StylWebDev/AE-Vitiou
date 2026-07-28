@@ -14,11 +14,11 @@
           <div class="mt-8 w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">Τελευταίος αγώνας</p>
             <div class="flex items-center justify-between gap-3">
-              <span class="flex-1 truncate text-right font-semibold">{{ stats?.lastMatches[0]?.home ?? 'Χωρίς Όνομα'}}</span>
+              <span class="flex-1 truncate text-right font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.home)?.label  ?? 'Χωρίς Όνομα'}}</span>
               <UBadge variant="subtle" size="xl" color="success">
                 {{ stats?.lastMatches[0]?.hs ?? '-' }} – {{ stats?.lastMatches[0]?.as ?? '-' }}
               </UBadge>
-              <span class="flex-1 truncate text-left font-semibold">{{ stats?.lastMatches[0]?.away ?? 'Χωρίς Όνομα' }}</span>
+              <span class="flex-1 truncate text-left font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.away)?.label ?? 'Χωρίς Όνομα' }}</span>
             </div>
           </div>
         </div>

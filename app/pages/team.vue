@@ -179,7 +179,9 @@ const formation = ref<FormationResponse>({
 const players = ref<Player[]>([])
 
 const fieldPlayers = computed(() => {
-  return JSON.parse(formation.value?.players ?? '[]')
+
+  const playerIds: number[] = JSON.parse(formation.value?.players ?? '[]')
+  return playerIds.map(id => players.value.find(player => player.id === id)).filter((player) => exists(player))
 })
 
 const timeline = [
