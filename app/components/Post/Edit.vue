@@ -2,8 +2,8 @@
   <UModal v-model:open="open" title="Προσθήκη Αρθρού">
     <slot/>
     <template #body>
-      <UForm ref="form" :schema="schema" :state="state" class="p-4  rounded-2xl space-y-4" @submit.prevent="createPost" >
-        <UFormField size="lg" name="name" label="Εικόνα" required :ui="{label: 'text-primary-100'}" >
+      <UForm ref="form" :schema="schema" :state="state" class="p-4  rounded-2xl space-y-4" @submit.prevent="editPost" >
+        <UFormField size="lg" name="name" label="Αλλαγή Εικόνας" :ui="{label: 'text-primary-100'}" >
           <UFileUpload
             v-model="file"
             icon="i-lucide-image"
@@ -29,22 +29,28 @@
       </UForm>
     </template>
     <template #footer>
-      <UButton color="success" size="xl" label="Δημιουργία" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
+      <UButton color="success" size="xl" label="Αποθήκευση" :loading="loading" :disabled="loading"  @click="form?.submit()"/>
     </template>
   </UModal>
 </template>
 
 <script lang="ts">
+interface Props {
+  post: Post;
+}
+
 interface Emits {
   refresh: [];
 }
 </script>
 
 <script setup lang="ts">
+const {post} = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const form = useTemplateRef<HTMLFormElement>('form');
 const open = ref(false);
 const loading = ref(false);
+
 const file = ref<File | null>(null);
 
 const schema = zod.object({
@@ -54,29 +60,24 @@ const schema = zod.object({
 })
 
 const state: ZodOutput<typeof schema> = reactive({
-  title: '',
-  description: '',
-  link: '',
+  title: post.title,
+  description: post.description,
+  link: post.link,
 
 })
 
 const toast = useToast();
 
-function reset() {
-  state.title = '';
-  state.description = '';
-  state.link = '';
-  file.value = null;
-}
-
-async function createPost() {
-  loading.value = true;
-
+async function editPost() {
+    loading.value = true;
 
     const arrayBuffer = await file.value?.arrayBuffer()
 
-    $fetch('/api/create/post', {
+    $fetch('/api/update/post', {
       method: HTTP_METHODS.POST,
+      query: {
+        id: post.id
+      },
       body: {
         ...state,
         img: exists(arrayBuffer) ? Array.from(new Uint8Array(arrayBuffer)) : undefined,
@@ -104,12 +105,22 @@ async function createPost() {
       loading.value = false;
       open.value = false;
       emit('refresh');
+
     })
 }
 
 watch(open, (v) => {
-  if (!v) {
-    reset();
+  if (v) {
+    if (exists(post.img)) {
+      file.value = new File(
+        [new Uint8Array(post.img.data)],           // array of BlobParts
+        "hello.txt",            // filename
+        { type: "text/plain" }  // MIME type (optional)
+      );
+      console.debug(file.value);
+    }
+  }else {
+    file.value = null;
   }
 })
 </script>

@@ -33,7 +33,7 @@ interface Emits {
 </script>
 
 <script setup lang="ts">
-defineEmits<Emits>()
+const emit = defineEmits<Emits>()
 const form = useTemplateRef<HTMLFormElement>('form');
 const open = ref(false);
 const loading = ref(false);
@@ -112,6 +112,8 @@ function createPlayer() {
   }).finally(() => {
     loading.value = false;
     open.value = false;
+    emit('refresh');
+
   })
 }
 

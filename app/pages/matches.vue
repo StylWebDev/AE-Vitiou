@@ -65,16 +65,18 @@
           :key="`match-${m.id}`"
           :ui="{ root: 'bg-primary-900/40 ring-primary-800/50', body: 'p-6' }"
         >
-          <div class="mb-5 flex items-center justify-between">
+          <div class="mb-5 flex items-start justify-between">
             <span class="text-xs font-bold uppercase tracking-widest text-primary-300">{{ competitions.find(comp => comp.value === m.competition)?.label }}</span>
-           <div class="flex gap-2">
+           <div class="flex max-sm:flex-col max-sm:items-end gap-2">
              <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
-             <MatchEdit v-if="loggedIn" :match="m" @refresh="getMatches()" >
-               <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
-             </MatchEdit>
-             <MatchDelete v-if="loggedIn" :match-id="m.id" @refresh="getMatches()" >
-               <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
-             </MatchDelete>
+             <div class="flex gap-2">
+               <MatchEdit v-if="loggedIn" :match="m" @refresh="getMatches()" >
+                 <UButton size="sm" variant="subtle" icon="material-symbols:edit-rounded"/>
+               </MatchEdit>
+               <MatchDelete v-if="loggedIn" :match-id="m.id" @refresh="getMatches()" >
+                 <UButton size="sm" variant="subtle" icon="material-symbols:delete-rounded"/>
+               </MatchDelete>
+             </div>
            </div>
           </div>
           <div class="flex items-center justify-between gap-4">
@@ -92,7 +94,7 @@
               <span class="text-xs font-semibold uppercase tracking-wide text-white">{{ teams.find(t => t.value === m.away)?.label  }}</span>
             </div>
           </div>
-          <UBadge variant="subtle" size="sm" color="warning" class="block mx-auto w-fit">{{ new Date(m.date).toLocaleString('el-GR') }}</UBadge>
+          <UBadge variant="subtle" size="sm" color="warning" class="block mt-4 mx-auto w-fit">{{ new Date(m.date).toLocaleString('el-GR') }}</UBadge>
         </UCard>
       </div>
 

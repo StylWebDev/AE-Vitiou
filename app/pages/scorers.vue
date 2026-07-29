@@ -5,27 +5,27 @@
       <template v-if="scorers.length > 0">
         <div  class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div
-            v-for="(scorer, i) in scorers.slice(0, 3)"
-            :key="`scorer-${scorer.player.id}`"
+            v-for="i in 3"
+            :key="`scorer-rank-${i}`"
             :data-rank="i+1"
-            class="group relative rounded-2xl data-[rank=1]:sm:-translate-y-3  data-[rank=1]:sm:scale-105 data-[rank=1]:ring-info data-[rank=1]:shadow-info/60 data-[rank=2]:ring-success data-[rank=2]:shadow-success/40 data-[rank=3]:ring-secondary data-[rank=3]:shadow-secondary/60  shadow-[0_0_40px_-8px] border bg-primary-900/40 px-6 pb-6 pt-10 text-center ring-1"
+            class="group relative rounded-2xl data-[rank=1]:order-2 data-[rank=2]:order-1 data-[rank=3]:order-3 data-[rank=1]:sm:-translate-y-3  data-[rank=1]:sm:scale-110 data-[rank=1]:ring-info data-[rank=1]:shadow-info/60 data-[rank=2]:ring-success data-[rank=2]:shadow-success/40 data-[rank=3]:ring-secondary data-[rank=3]:shadow-secondary/60  shadow-[0_0_40px_-8px] border bg-primary-900/40 px-6 pb-6 pt-10 text-center ring-1"
           >
             <UIcon
               name="lucide:medal"
               class="absolute left-1/2 top-0 h-8 w-8 -translate-x-1/2 -translate-y-1/2 group-data-[rank=1]:text-info-300 group-data-[rank=2]:text-success-200 group-data-[rank=3]:text-secondary-200"
             />
             <img src="/logo.webp" alt="ae_vitsiou_img" class="mx-auto mb-3 h-14 w-14 object-contain" >
-            <p class="text-sm font-bold uppercase tracking-wide text-white">{{ scorer.player.name }}</p>
-            <p class="mt-1 text-[11px] uppercase tracking-widest text-warning">{{positions[scorer.player.pos]}}</p>
+            <p class="text-sm font-bold uppercase tracking-wide text-white">{{ scorers[i-1]?.player.name ?? '-' }} <sup v-if="scorers[i-1]?.player.isCaptain" class="text-orange-600">(C)</sup></p>
+            <p class="mt-1 text-[11px] uppercase tracking-widest text-warning">{{exists(scorers[i-1]) ? positions[scorers[i-1]!.player.pos] : 'Κενή Θέση'}}</p>
             <p
               class="group-data-[rank=1]:text-info-300 group-data-[rank=2]:text-success-200 group-data-[rank=3]:text-secondary-200   mt-3 text-3xl font-black"
             >
-              {{ scorer.ga  }}
+              {{ scorers[i-1]?.ga ?? 0  }}
             </p>
           </div>
         </div>
 
-        <div class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
+        <div v-if="scorers.slice(3).length > 0" class="overflow-hidden rounded-2xl border border-primary-800/40 bg-primary-900/30">
           <div
             v-for="(scorer, i) in scorers.slice(3)"
             :key="`scorer-${scorer.player.id}`"
@@ -44,8 +44,10 @@
             <span class="shrink-0 text-lg font-black text-secondary-300">{{ scorer.ga }}</span>
           </div>
         </div>
+        <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες με βάση την αναζήτηση σας" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
+
       </template>
-      <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν δεδομένα στη βάση" :ui="{root: 'bg-primary-900/30 ring ring-primary-700 h-[60vh]', title: 'text-primary-300'}" />
+      <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν δεδομένα στη βάση" :ui="{root: 'bg-primary-900/30 ring ring-primary-700 ', title: 'text-primary-300'}" />
   </UPageSection>
 </template>
 
