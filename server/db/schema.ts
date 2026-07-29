@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, unique } from 'drizzle-orm/sqlite-core'
+import { blob, sqliteTable, text, integer, unique } from 'drizzle-orm/sqlite-core'
 
 export const player = sqliteTable('players', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -38,4 +38,13 @@ export const formation = sqliteTable('formation', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   formation: text({enum: ['S433', 'S343', 'S442', 'S352', 'S451', 'S3421', 'S4231']}).notNull().default('S433'),
   players: text({mode: "json"}).notNull().default(''),
+})
+
+export const blog = sqliteTable('blog', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  img: blob(),
+  date: integer('date', {mode: "timestamp"}).notNull().default(new Date()),
+  title: text('title').notNull().default(''),
+  description: text('description').notNull().default(''),
+  link: text('link').notNull().default(''),
 })

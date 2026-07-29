@@ -39,7 +39,7 @@
       <div class="flex justify-between items-center">
         <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
         <FormationSet v-if="loggedIn" :players="players" :football-schema="formation" @refresh="getFormation()">
-          <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
+          <UButton size="sm" variant="subtle" icon="material-symbols:edit-rounded"/>
         </FormationSet>
       </div>
 <!--      :receiver-system="formation.formation"-->
@@ -69,43 +69,50 @@
         <div
           v-for="(s, i) in players"
           :key="s.number"
-          class="flex flex-col lg:flex-row items-center justify-between gap-4 px-6 py-5"
+          class="flex flex-col items-center justify-between gap-4 px-6 py-5"
           :class="i !== players.length - 1 ? 'border-b border-primary-800/40' : ''"
         >
-          <div class="flex items-center gap-4 max-md:justify-center max-lg:w-full">
+
+          <div class="flex w-full items-center gap-1">
             <span class="w-6 text-sm font-bold text-white/40">{{ s.number }}</span>
-            <UBadge
-              size="lg"
-              :color="PosColor[s.pos]"
-              :label="s.pos"
-              class="rounded-full min-w-12 justify-center"
-            />
-            <span class="truncate font-semibold uppercase tracking-wide text-white">
-              {{ s.name }}
-              <span v-if="s.isCaptain" class="text-xs text-orange-500">(c)</span>
-            </span>
+
+            <div class="flex flex-1 justify-between">
+              <div class="flex items-center gap-2 max-lg:w-full">
+                <UBadge
+                  size="lg"
+                  :color="PosColor[s.pos]"
+                  :label="s.pos"
+                  class="rounded-full min-w-12 justify-center"
+                />
+                <span class="truncate text-sm font-semibold uppercase tracking-wide text-white">
+                {{ s.name }}
+                <sup v-if="s.isCaptain" class="text-xs text-orange-500">(c)</sup>
+              </span>
+              </div>
+
+              <div class="flex gap-2">
+                <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
+                  <UButton size="sm" icon="material-symbols:edit-rounded"/>
+                </PlayersEdit>
+                <PlayersDelete v-if="loggedIn" :player-id="s.id" @refresh="getPlayers()">
+                  <UButton size="sm" icon="material-symbols:delete-rounded"/>
+                </PlayersDelete>
+              </div>
+            </div>
           </div>
 
-          <div class="flex items-center gap-4 max-lg:justify-between max-lg:w-9/10">
+
+          <div class="flex w-full items-center gap-4 justify-between max-lg:w-9/10">
               <span class="shrink-0 text-sm font-black text-secondary-300 uppercase tracking-wide">
                 {{ positions[s.pos] }}
               </span>
-            <div class="flex">
-              <UBadge size="md" variant="subtle" color="success" label="-" class="rounded-full" />
-              <PlayersEdit v-if="loggedIn" :player="s" @refresh="getPlayers()">
-                <UButton size="sm" variant="ghost" icon="material-symbols:edit-rounded"/>
-              </PlayersEdit>
-              <PlayersDelete v-if="loggedIn" :player-id="s.id" @refresh="getPlayers()">
-                <UButton size="sm" variant="ghost" icon="material-symbols:delete-rounded"/>
-              </PlayersDelete>
-            </div>
 
+              <UBadge size="md" variant="subtle" color="success" :label="`GA: (${goals.find(g => g.playerId === s.id)?.ga ?? '0'})`" class="rounded-full" />
           </div>
         </div>
       </div>
       <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες με βάση την αναζήτηση σας" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
     </section>
-
 
     <section>
       <div class="mb-6 flex items-center gap-2 text-primary-300">
@@ -176,6 +183,7 @@ const formation = ref<FormationResponse>({
   players: '[]'
 })
 const players = ref<Player[]>([])
+const goals = ref<Omit<Goal, 'matchId'>[]>([])
 
 const fieldPlayers = computed(() => {
 
@@ -227,6 +235,16 @@ function getPlayers() {
     })
 }
 
+function getGoals() {
+  $fetch<ApiResponse<Omit<Goal, 'matchId'>[]>>('/api/get/goals')
+    .then((res) => {
+      goals.value = res.response;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+}
+
 function getFormation() {
   $fetch<ApiResponse<FormationResponse>>('/api/get/formation')
     .then((resp) => {
@@ -243,5 +261,6 @@ function getStats() {
 
 getPlayers()
 getStats();
+getGoals();
 getFormation();
 </script>
