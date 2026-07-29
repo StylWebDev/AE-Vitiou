@@ -39,7 +39,7 @@
       <div class="flex justify-between items-center">
         <h2 class="mb-6 text-2xl font-black italic text-white">ΤΟ ΣΧΗΜΑ ΜΑΣ</h2>
         <FormationSet v-if="loggedIn" :players="players" :football-schema="formation" @refresh="getFormation()">
-          <UButton size="sm" icon="material-symbols:edit-rounded"/>
+          <UButton size="sm" variant="subtle" icon="material-symbols:edit-rounded"/>
         </FormationSet>
       </div>
 <!--      :receiver-system="formation.formation"-->
@@ -107,13 +107,12 @@
                 {{ positions[s.pos] }}
               </span>
 
-              <UBadge size="md" variant="subtle" color="success" label="GA: (-)" class="rounded-full" />
+              <UBadge size="md" variant="subtle" color="success" :label="`GA: (${goals.find(g => g.playerId === s.id)?.ga ?? '0'})`" class="rounded-full" />
           </div>
         </div>
       </div>
       <UEmpty v-else :avatar="{icon: 'si-glyph:database-error', color: 'primary'}" variant="naked" title="Δεν βρέθηκαν παίχτες με βάση την αναζήτηση σας" :ui="{root: 'bg-primary-900/30 ring ring-primary-700', title: 'text-primary-300'}" />
     </section>
-
 
     <section>
       <div class="mb-6 flex items-center gap-2 text-primary-300">
@@ -184,6 +183,7 @@ const formation = ref<FormationResponse>({
   players: '[]'
 })
 const players = ref<Player[]>([])
+const goals = ref<Omit<Goal, 'matchId'>[]>([])
 
 const fieldPlayers = computed(() => {
 
@@ -235,6 +235,16 @@ function getPlayers() {
     })
 }
 
+function getGoals() {
+  $fetch<ApiResponse<Omit<Goal, 'matchId'>[]>>('/api/get/goals')
+    .then((res) => {
+      goals.value = res.response;
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+}
+
 function getFormation() {
   $fetch<ApiResponse<FormationResponse>>('/api/get/formation')
     .then((resp) => {
@@ -251,5 +261,6 @@ function getStats() {
 
 getPlayers()
 getStats();
+getGoals();
 getFormation();
 </script>

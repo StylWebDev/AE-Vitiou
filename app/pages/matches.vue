@@ -71,10 +71,10 @@
              <UBadge color="secondary" variant="subtle" size="sm">{{ tabs.find(tab => tab.key === m.status)?.label  }}</UBadge>
              <div class="flex gap-2">
                <MatchEdit v-if="loggedIn" :match="m" @refresh="getMatches()" >
-                 <UButton size="sm" variant="subtle" icon="material-symbols:edit-rounded"/>
+                 <UButton size="sm"  icon="material-symbols:edit-rounded"/>
                </MatchEdit>
                <MatchDelete v-if="loggedIn" :match-id="m.id" @refresh="getMatches()" >
-                 <UButton size="sm" variant="subtle" icon="material-symbols:delete-rounded"/>
+                 <UButton size="sm"  icon="material-symbols:delete-rounded"/>
                </MatchDelete>
              </div>
            </div>
