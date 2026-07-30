@@ -59,6 +59,7 @@ export interface Stats {
   "titles": number;
   "topScoredMatches": Match[];
   "lastMatches": Match[];
+  "lastMatch": Match;
   "topScorers": Player[] ;
 }
 

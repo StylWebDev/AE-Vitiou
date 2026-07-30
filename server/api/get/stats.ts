@@ -20,6 +20,8 @@ export default defineEventHandler(async () => {
       points: sql<number>`coalesce(cast(sum(${schema.matches.points}) as int), 0)`
     }).from(schema.matches)
 
+    const lastMatch = await db.select().from(schema.matches).where(or(eq(schema.matches.status, 'final'), eq(schema.matches.status, 'live'))).orderBy(desc(schema.matches.status), desc(schema.matches.date)).limit(1);
+
     const lastMatches = await db.select().from(schema.matches).where(eq(schema.matches.status, 'final')).orderBy(desc(schema.matches.date)).limit(5);
 
     const titles =  await db.$count(schema.matches, eq(schema.matches.isTrophy, true))
@@ -60,6 +62,7 @@ export default defineEventHandler(async () => {
         ...points[0],
         titles,
         topScoredMatches: topScoredMatches.map(match => ({...match.match})) ,
+        lastMatch: {...lastMatch[0]},
         lastMatches,
         topScorers: topScorers.map(scorer => ({...scorer.player })) ,
       }
@@ -68,7 +71,7 @@ export default defineEventHandler(async () => {
   catch {
     throw createError({
       status: 400,
-      statusText: 'Could not Get Players',
+      statusText: 'Could not Get Stats',
     })
   }
 })

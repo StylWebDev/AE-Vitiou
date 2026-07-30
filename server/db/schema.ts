@@ -26,7 +26,7 @@ export const matches = sqliteTable('matches', {
 export const goals = sqliteTable('goals', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   playerId: integer('player_id').notNull().references(() => player.id, {onDelete: "cascade"}),
-  matchId: integer('match_id').notNull().references(() => player.id, {onDelete: "cascade"}),
+  matchId: integer('match_id').notNull().references(() => matches.id, {onDelete: "cascade"}),
   ga: integer('ga').notNull(),
   createdAt: integer('created_at',{ mode: 'timestamp' }).notNull(),
 }, (table) => [
