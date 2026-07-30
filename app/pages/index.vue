@@ -1,11 +1,12 @@
 <template>
     <UPageSection>
+
       <section
         class="relative overflow-hidden rounded-3xl border border-primary-800/60 bg-linear-to-b from-primary-600 to-primary-900 p-8 text-white shadow-2xl sm:p-14"
       >
         <div class="flex flex-col items-center text-center">
-          <UBadge color="warning" variant="subtle" class="mb-6 rounded-2xl uppercase tracking-widest">
-            Ολοκληρώθηκε · {{ exists(stats?.lastMatches[0]) ? new Date(stats.lastMatches[0].date).toLocaleString('el-GR') : '-' }}
+          <UBadge :color="stats?.lastMatch.status === 'live' ? 'success' : 'warning'" variant="subtle" class="mb-6 rounded-2xl uppercase tracking-widest">
+            <UIcon v-if="exists(stats?.lastMatch.status) && stats?.lastMatch.status === 'live'" name="stash:circle-dot-duotone" class="text-success animate-ping"/> {{ stats?.lastMatch.status === 'live' ? 'Live' : 'Ολοκληρώθηκε' }} · {{exists(stats?.lastMatch.date) ? new Date(stats.lastMatch.date).toLocaleString('el-GR') : '-' }}
           </UBadge>
           <NuxtImg src="/logo.webp" alt="ΑΕ Βιτσιου" class="my-4 h-24 w-24 object-contain" />
           <h1 class="text-4xl font-black italic uppercase tracking-tight sm:text-6xl">ΑΕ ΒΙΤΣΙΟΥ</h1>
@@ -14,11 +15,11 @@
           <div class="mt-8 w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-white/50">Τελευταίος αγώνας</p>
             <div class="flex items-center justify-between gap-3">
-              <span class="flex-1 truncate text-right font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.home)?.label  ?? 'Χωρίς Όνομα'}}</span>
+              <span class="flex-1 truncate text-right font-semibold">{{ teams.find(t => t.value === stats?.lastMatch.home)?.label  ?? 'Χωρίς Όνομα'}}</span>
               <UBadge variant="subtle" size="xl" color="success">
-                {{ stats?.lastMatches[0]?.hs ?? '-' }} – {{ stats?.lastMatches[0]?.as ?? '-' }}
+                {{ stats?.lastMatch.hs ?? '-' }} – {{ stats?.lastMatch.as ?? '-' }}
               </UBadge>
-              <span class="flex-1 truncate text-left font-semibold">{{ teams.find(t => t.value === stats?.lastMatches[0]?.away)?.label ?? 'Χωρίς Όνομα' }}</span>
+              <span class="flex-1 truncate text-left font-semibold">{{ teams.find(t => t.value === stats?.lastMatch.away)?.label ?? 'Χωρίς Όνομα' }}</span>
             </div>
           </div>
         </div>
