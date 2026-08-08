@@ -1,5 +1,5 @@
 <template>
-  <UContainer class="min-h-screen flex flex-col ">
+   <UContainer class="min-h-screen flex flex-col ">
     <!-- Header -->
     <UDashboardNavbar title="ΑΕ Βιτσίου" toggle-side="right" :toggle="{ color: 'primary', variant: 'ghost',  class: 'rounded-full', onClick: () => {open=!open} }" class="sticky top-0 z-50 bg-linear-to-tr  from-primary-600/90 to-primary-900/90 backdrop-blur" :ui="{root: 'border-primary/40', title: 'text-primary-300'}">
       <template #leading>
@@ -18,9 +18,21 @@
     <!-- Page content -->
     <UMain class="flex-1 min-h-[calc(100vh-var(--ui-header-height)-var(--ui-footer-height)]">
       <slot />
+      <h5 class="text-center text-primary-100 text-2xl font-bold uppercase">Οι επιχειρήσεις που μας στηρίζουν</h5>
+      <UMarquee class="btt:overflow-hidden" :ui="{root: 'before:from-primary-950 after:from-primary-950'}">
+        <div
+          v-for="item in sponsors"
+          :key="item.src"
+          class="size-60 overflow-hidden"
+        >
+          <img
+            :src="item.src"
+            :alt="item.alt"
+            class="size-full object-contain"
+          />
+        </div>
+      </UMarquee>
     </UMain>
-
-
     <USeparator color="primary" :avatar="{src: '/logo.webp', loading: 'lazy'}" class="translate-y-2" :ui="{root: 'relative z-50'}" />
     <UFooter class=" bg-primary-800/30 backdrop-blur-2xl" :ui="{root: 'relative z-40'}">
       <template #left>
@@ -75,6 +87,25 @@ const socialLinks: ButtonProps[] = [
     color: 'secondary',
     to: 'mailto:abvitsiou@gmail.gr',
     target: '_blank',
+  }
+]
+
+const sponsors = [
+  {
+    src: '/sponsor1.webp',
+    alt: 'koumpidis'
+  },
+  {
+    src: '/sponsor2.webp',
+    alt: 'kalogiannis'
+  },
+  {
+    src: '/sponsor3.webp',
+    alt: 'tsiflikiotis'
+  },
+  {
+    src: '/sponsor4.webp',
+    alt: 'sarampinas'
   }
 ]
 
